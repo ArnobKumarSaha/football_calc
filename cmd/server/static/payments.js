@@ -62,10 +62,9 @@ async function listPayments() {
       <td>৳${p.amount.toFixed(2)}</td>
       <td>${p.paid_at}</td>
       <td>${p.notes || '—'}</td>
-      <td><button class="btn btn-sm btn-danger" onclick="deletePayment(${p.id})">Del</button></td>
     </tr>
   `);
-  el.innerHTML = renderTable(['ID','Player','Match','Amount','Date','Notes',''], rows);
+  el.innerHTML = renderTable(['ID','Player','Match','Amount','Date','Notes'], rows);
 }
 
 async function deletePayment(id) {
