@@ -115,10 +115,15 @@ async function toggleMatchDetail(id) {
   `;
 }
 
-function showEditMatch(id, date, bill, notes) {
+async function showEditMatch(id, date, bill, notes) {
   const card = document.getElementById('mc-' + id);
   const existing = card.querySelector('.edit-form');
   if (existing) { existing.remove(); return; }
+
+  const res = await api('GET', '/matches/' + id);
+  const md = res ? await res.json() : {};
+  const attendees = md.attendees || [];
+
   const form = document.createElement('div');
   form.className = 'edit-form card';
   form.innerHTML = `
@@ -128,12 +133,42 @@ function showEditMatch(id, date, bill, notes) {
       <label>Bill <input type="number" id="em-bill-${id}" step="0.01" value="${bill}"></label>
       <label>Notes <input type="text" id="em-notes-${id}" value="${notes}"></label>
     </div>
-    <div style="display:flex;gap:8px">
+    <div style="margin-top:12px">
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+        <strong>Attendees</strong>
+        <button class="btn btn-sm" onclick="addEditAttendeeRow('em-att-${id}')">+ Add</button>
+      </div>
+      <div id="em-att-${id}">
+        ${attendees.map(a => `
+          <div class="form-row attendee-row" style="align-items:center">
+            <label>Player <select class="att-player">${playerOptionsSelected(a.player_id)}</select></label>
+            <label>Guests <input type="number" class="att-guests" value="${a.guest_count}" min="0" style="width:60px"></label>
+            <button class="btn btn-sm btn-danger" onclick="this.closest('.attendee-row').remove()">✕</button>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:12px">
       <button class="btn btn-primary" onclick="updateMatch(${id})">Save</button>
       <button class="btn" onclick="this.closest('.edit-form').remove()">Cancel</button>
     </div>
   `;
+  form.querySelector('#em-att-' + id).dataset.originals = JSON.stringify(attendees.map(a => a.player_id));
   card.appendChild(form);
+}
+
+function addEditAttendeeRow(containerId) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  const row = document.createElement('div');
+  row.className = 'form-row attendee-row';
+  row.style.alignItems = 'center';
+  row.innerHTML = `
+    <label>Player <select class="att-player">${playerOptions()}</select></label>
+    <label>Guests <input type="number" class="att-guests" value="0" min="0" style="width:60px"></label>
+    <button class="btn btn-sm btn-danger" onclick="this.closest('.attendee-row').remove()">✕</button>
+  `;
+  container.appendChild(row);
 }
 
 async function createMatch() {
@@ -165,6 +200,26 @@ async function updateMatch(id) {
   const res = await api('PATCH', '/matches/' + id, body);
   if (!res) return;
   if (!res.ok) { const d = await res.json(); toast(d.error || 'Error', false); return; }
+
+  const container = document.getElementById('em-att-' + id);
+  if (container) {
+    const originalIds = JSON.parse(container.dataset.originals || '[]');
+    const rows = Array.from(container.querySelectorAll('.attendee-row'));
+    const currentIds = [];
+    for (const row of rows) {
+      const playerId = parseInt(row.querySelector('.att-player').value);
+      const guestCount = parseInt(row.querySelector('.att-guests').value) || 0;
+      if (!playerId) continue;
+      currentIds.push(playerId);
+      await api('POST', '/matches/' + id + '/attendees', { player_id: playerId, guest_count: guestCount });
+    }
+    for (const pid of originalIds) {
+      if (!currentIds.includes(pid)) {
+        await api('DELETE', '/matches/' + id + '/attendees/' + pid);
+      }
+    }
+  }
+
   toast('Match updated');
   document.querySelector('#mc-' + id + ' .edit-form')?.remove();
   const detail = document.getElementById('md-' + id);

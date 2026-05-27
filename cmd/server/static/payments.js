@@ -19,7 +19,6 @@ async function payments(el) {
       <h3>Payment History</h3>
       <div class="form-row">
         <label>Player <select id="filterPlayer">${playerOptions(true)}</select></label>
-        <label>Match ID <input type="number" id="filterMatch" placeholder="all"></label>
         <button class="btn" style="align-self:flex-end" onclick="listPayments()">Load</button>
       </div>
       <div id="payList"></div>
@@ -48,10 +47,8 @@ async function createPayment() {
 
 async function listPayments() {
   const playerFilter = document.getElementById('filterPlayer').value;
-  const matchFilter = document.getElementById('filterMatch').value;
   let path = '/payments?';
   if (playerFilter) path += 'player_id=' + playerFilter + '&';
-  if (matchFilter) path += 'match_id=' + matchFilter + '&';
   const res = await api('GET', path);
   if (!res) return;
   const data = await res.json();

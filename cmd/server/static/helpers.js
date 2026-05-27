@@ -26,3 +26,8 @@ function playerOptions(includeAll = false) {
   const all = includeAll ? '<option value="">All players</option>' : '<option value="">— select —</option>';
   return all + state.players.map(p => `<option value="${p.id}">${p.name}</option>`).join('');
 }
+
+function playerOptionsSelected(selectedId) {
+  return '<option value="">— select —</option>' +
+    state.players.map(p => `<option value="${p.id}" ${p.id === selectedId ? 'selected' : ''}>${p.name}</option>`).join('');
+}
