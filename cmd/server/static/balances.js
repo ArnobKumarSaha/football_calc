@@ -29,7 +29,7 @@ async function loadPlayerDetail(card) {
   if (!res) return;
   const h = await res.json();
   const rows = (h.matches || []).map(m =>
-    `<tr><td>${m.match_id}</td><td>${m.match_date}</td><td>৳${m.due != null ? m.due.toFixed(2) : '—'}</td><td>৳${m.paid.toFixed(2)}</td></tr>`
+    `<tr><td>${m.match_date}</td><td>৳${m.due != null ? m.due.toFixed(2) : '—'}</td><td>৳${m.paid.toFixed(2)}</td></tr>`
   );
   el.innerHTML = `
     <div class="card">
@@ -41,7 +41,7 @@ async function loadPlayerDetail(card) {
           <span>Balance: ${balanceBadge(h.balance)}</span>
         </div>
       </div>
-      ${renderTable(['Match', 'Date', 'Due', 'Paid'], rows)}
+      ${renderTable(['Date', 'Due', 'Paid'], rows)}
     </div>
   `;
 }

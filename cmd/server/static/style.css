@@ -106,7 +106,11 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
   flex: 1;
   margin-left: var(--sidebar-w);
   padding: 28px 32px;
-  max-width: 960px;
+}
+
+#page {
+  max-width: 900px;
+  margin: 0 auto;
 }
 
 /* ── Common ──────────────────────────────────────────────────── */
