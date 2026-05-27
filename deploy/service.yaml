@@ -1,11 +1,12 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: football-calc
-  namespace: football-calc
+  name: football
+  namespace: dev
 spec:
+  type: LoadBalancer
   selector:
-    app: football-calc
+    app: football
   ports:
-    - port: 8080
+    - port: 80
       targetPort: 8080

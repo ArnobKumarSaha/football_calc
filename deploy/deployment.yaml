@@ -1,26 +1,27 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: football-calc
-  namespace: football-calc
+  name: football
+  namespace: dev
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: football-calc
+      app: football
   template:
     metadata:
       labels:
-        app: football-calc
+        app: football
     spec:
       containers:
-        - name: football-calc
+        - name: football
           image: ghcr.io/arnobkumarsaha/football-calc:latest
+          imagePullPolicy: Always
           ports:
             - containerPort: 8080
           envFrom:
             - secretRef:
-                name: football-calc-secret
+                name: football-secret
           livenessProbe:
             httpGet:
               path: /healthz
