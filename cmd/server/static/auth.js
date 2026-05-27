@@ -1,9 +1,11 @@
 'use strict';
 
-function login() {
+async function login() {
   const pwd = document.getElementById('pwd').value.trim();
   if (!pwd) return;
   state.token = pwd;
+  const res = await api('GET', '/auth');
+  if (!res) return;
   localStorage.setItem('token', pwd);
   renderApp();
 }

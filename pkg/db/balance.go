@@ -20,7 +20,7 @@ func GetPlayerBalance(ctx context.Context, pool *pgxpool.Pool, playerID int) (*m
 	}
 
 	rows, err := pool.Query(ctx,
-		`SELECT ma.match_id, m.date,
+		`SELECT ma.match_id, m.date::text,
 		   COALESCE(SUM(pay.amount), 0) AS paid,
 		   (SELECT MAX(id) FROM match_attendees WHERE match_id=m.id) AS last_id,
 		   (SELECT SUM(1+guest_count) FROM match_attendees WHERE match_id=m.id) AS total_units,

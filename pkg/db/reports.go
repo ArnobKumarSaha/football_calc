@@ -99,7 +99,7 @@ func AttendanceReports(ctx context.Context, pool *pgxpool.Pool) ([]AttendanceRep
 
 func MatchesCSV(ctx context.Context, pool *pgxpool.Pool) ([]MatchCSVRow, error) {
 	rows, err := pool.Query(ctx,
-		`SELECT m.id, m.date, m.total_bill,
+		`SELECT m.id, m.date::text, m.total_bill,
 		   p.id, p.name, ma.guest_count, ma.id AS attendee_id,
 		   (SELECT MAX(id) FROM match_attendees WHERE match_id=m.id) AS last_id,
 		   (SELECT SUM(1+guest_count) FROM match_attendees WHERE match_id=m.id) AS total_units
@@ -172,7 +172,7 @@ func MatchesCSV(ctx context.Context, pool *pgxpool.Pool) ([]MatchCSVRow, error) 
 
 func PaymentsCSV(ctx context.Context, pool *pgxpool.Pool) ([]PaymentCSVRow, error) {
 	rows, err := pool.Query(ctx,
-		`SELECT pay.id, p.id, p.name, pay.match_id, pay.amount, pay.paid_at, pay.notes
+		`SELECT pay.id, p.id, p.name, pay.match_id, pay.amount, pay.paid_at::text, pay.notes
 		 FROM payments pay
 		 JOIN players p ON p.id=pay.player_id
 		 ORDER BY pay.paid_at DESC, pay.id DESC`)

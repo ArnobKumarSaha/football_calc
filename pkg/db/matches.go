@@ -10,7 +10,7 @@ import (
 
 func ListMatches(ctx context.Context, pool *pgxpool.Pool, limit, offset int) ([]models.Match, error) {
 	rows, err := pool.Query(ctx,
-		`SELECT id, date, total_bill, notes, created_at, deleted_at
+		`SELECT id, date::text, total_bill, notes, created_at, deleted_at
 		 FROM matches WHERE deleted_at IS NULL ORDER BY date DESC LIMIT $1 OFFSET $2`,
 		limit, offset)
 	if err != nil {
@@ -32,7 +32,7 @@ func ListMatches(ctx context.Context, pool *pgxpool.Pool, limit, offset int) ([]
 func GetMatch(ctx context.Context, pool *pgxpool.Pool, id int) (*models.Match, error) {
 	var m models.Match
 	err := pool.QueryRow(ctx,
-		`SELECT id, date, total_bill, notes, created_at, deleted_at
+		`SELECT id, date::text, total_bill, notes, created_at, deleted_at
 		 FROM matches WHERE id=$1 AND deleted_at IS NULL`, id).
 		Scan(&m.ID, &m.Date, &m.TotalBill, &m.Notes, &m.CreatedAt, &m.DeletedAt)
 	if err != nil {
@@ -45,7 +45,7 @@ func CreateMatch(ctx context.Context, pool *pgxpool.Pool, date string, totalBill
 	var m models.Match
 	err := pool.QueryRow(ctx,
 		`INSERT INTO matches (date, total_bill, notes) VALUES ($1,$2,$3)
-		 RETURNING id, date, total_bill, notes, created_at, deleted_at`,
+		 RETURNING id, date::text, total_bill, notes, created_at, deleted_at`,
 		date, totalBill, notes).
 		Scan(&m.ID, &m.Date, &m.TotalBill, &m.Notes, &m.CreatedAt, &m.DeletedAt)
 	if err != nil {
@@ -62,7 +62,7 @@ func UpdateMatch(ctx context.Context, pool *pgxpool.Pool, id int, date *string, 
 		   total_bill = COALESCE($3, total_bill),
 		   notes      = COALESCE($4, notes)
 		 WHERE id=$1 AND deleted_at IS NULL
-		 RETURNING id, date, total_bill, notes, created_at, deleted_at`,
+		 RETURNING id, date::text, total_bill, notes, created_at, deleted_at`,
 		id, date, totalBill, notes).
 		Scan(&m.ID, &m.Date, &m.TotalBill, &m.Notes, &m.CreatedAt, &m.DeletedAt)
 	if err != nil {

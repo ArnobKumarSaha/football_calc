@@ -61,6 +61,13 @@ func NewRouter(pool *pgxpool.Pool, adminPassword string, static fs.FS) http.Hand
 		r.Delete("/api/payments/{id}", DeletePayment(pool))
 	})
 
+	r.Group(func(r chi.Router) {
+		r.Use(authMiddleware(adminPassword))
+		r.Get("/api/auth", func(w http.ResponseWriter, _ *http.Request) {
+			writeJSON(w, http.StatusOK, map[string]bool{"ok": true})
+		})
+	})
+
 	r.Get("/api/reports/monthly", MonthlyReport(pool))
 	r.Get("/api/reports/attendance", AttendanceReport(pool))
 	r.Get("/api/reports/matches.csv", MatchesCSV(pool))

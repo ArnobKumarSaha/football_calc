@@ -9,7 +9,7 @@ import (
 )
 
 func ListPayments(ctx context.Context, pool *pgxpool.Pool, playerID, matchID *int) ([]models.Payment, error) {
-	query := `SELECT id, player_id, match_id, amount, notes, paid_at, created_at FROM payments WHERE 1=1`
+	query := `SELECT id, player_id, match_id, amount, notes, paid_at::text, created_at FROM payments WHERE 1=1`
 	args := []any{}
 	idx := 1
 
@@ -46,7 +46,7 @@ func CreatePayment(ctx context.Context, pool *pgxpool.Pool, playerID int, matchI
 	var p models.Payment
 	err := pool.QueryRow(ctx,
 		`INSERT INTO payments (player_id, match_id, amount, paid_at, notes) VALUES ($1,$2,$3,$4,$5)
-		 RETURNING id, player_id, match_id, amount, notes, paid_at, created_at`,
+		 RETURNING id, player_id, match_id, amount, notes, paid_at::text, created_at`,
 		playerID, matchID, amount, paidAt, notes).
 		Scan(&p.ID, &p.PlayerID, &p.MatchID, &p.Amount, &p.Notes, &p.PaidAt, &p.CreatedAt)
 	if err != nil {
@@ -64,7 +64,7 @@ func UpdatePayment(ctx context.Context, pool *pgxpool.Pool, id int, matchID *int
 		   paid_at  = COALESCE($4, paid_at),
 		   notes    = COALESCE($5, notes)
 		 WHERE id=$1
-		 RETURNING id, player_id, match_id, amount, notes, paid_at, created_at`,
+		 RETURNING id, player_id, match_id, amount, notes, paid_at::text, created_at`,
 		id, matchID, amount, paidAt, notes).
 		Scan(&p.ID, &p.PlayerID, &p.MatchID, &p.Amount, &p.Notes, &p.PaidAt, &p.CreatedAt)
 	if err != nil {

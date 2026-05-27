@@ -12,6 +12,7 @@ async function api(method, path, body) {
     return null;
   }
   if (res.status === 401) {
+    toast('Wrong password or session expired', false);
     logout();
     return null;
   }
