@@ -19,14 +19,12 @@ async function balances(el) {
     <div id="playerDetail"></div>
     <div class="card bank-info">
       <h4>Bank Account Info</h4>
-      <table class="bank-table">
-        <tr><td>Account Number</td><td>1056069500001</td></tr>
-        <tr><td>Account Name</td><td>ARNOB KUMAR SAHA</td></tr>
-        <tr><td>Bank Name</td><td>BRAC Bank PLC</td></tr>
-        <tr><td>Branch Name</td><td>MADANI AVENUE BRANCH</td></tr>
-        <tr><td>Routing Number</td><td>060263429</td></tr>
-        <tr><td>SWIFT Code</td><td>BRAKBDDH</td></tr>
-      </table>
+      <p>Account Number: 1056069500001</p>
+      <p>Account Name: ARNOB KUMAR SAHA</p>
+      <p>Bank Name: BRAC Bank PLC</p>
+      <p>Branch Name: MADANI AVENUE BRANCH</p>
+      <p>Routing Number: 060263429</p>
+      <p>SWIFT Code: BRAKBDDH</p>
     </div>
   `;
 }
