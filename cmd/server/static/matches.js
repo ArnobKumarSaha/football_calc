@@ -101,7 +101,7 @@ async function toggleMatchDetail(id) {
     `<tr><td>${a.player_name}</td><td>${a.guest_count}</td><td>৳${a.due.toFixed(2)}</td></tr>`
   );
   const paymentRows = (md.payments || []).map(p =>
-    `<tr><td>${p.player_name || p.player_id}</td><td>৳${p.amount.toFixed(2)}</td><td>${p.paid_at}</td><td>${p.notes||'—'}</td></tr>`
+    `<tr><td>${p.player_name}</td><td>৳${p.amount.toFixed(2)}</td><td>${p.paid_at}</td><td>${p.notes||'—'}</td></tr>`
   );
   detail.innerHTML = `
     <div class="detail-grid">

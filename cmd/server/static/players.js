@@ -42,7 +42,7 @@ async function refreshPlayerList() {
             <td>${p.name}</td>
             <td>${balanceBadge(p.balance)}</td>
             <td class="row-actions">
-              <button class="btn btn-sm" onclick="togglePaymentHistory(${p.id}, this)">Show history</button>
+              <button class="btn btn-sm" onclick="togglePaymentHistory(${p.id}, this)">Show payment history</button>
               ${state.token ? `<button class="btn btn-sm btn-danger" onclick="deletePlayer(${p.id})">Delete</button>` : ''}
             </td>
           </tr>
@@ -75,7 +75,7 @@ async function togglePaymentHistory(id, btn) {
     btn.textContent = 'Show history';
     return;
   }
-  btn.textContent = 'Hide history';
+  btn.textContent = 'Hide payment history';
   row.style.display = '';
   const td = row.querySelector('td');
   td.innerHTML = '<p class="loading" style="padding:12px">Loading…</p>';

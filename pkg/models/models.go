@@ -43,13 +43,14 @@ type MatchDetail struct {
 }
 
 type Payment struct {
-	ID        int       `json:"id"`
-	PlayerID  int       `json:"player_id"`
-	MatchID   *int      `json:"match_id,omitempty"`
-	Amount    float64   `json:"amount"`
-	Notes     *string   `json:"notes,omitempty"`
-	PaidAt    string    `json:"paid_at"`
-	CreatedAt time.Time `json:"created_at"`
+	ID         int       `json:"id"`
+	PlayerID   int       `json:"player_id"`
+	PlayerName string    `json:"player_name"`
+	MatchID    *int      `json:"match_id,omitempty"`
+	Amount     float64   `json:"amount"`
+	Notes      *string   `json:"notes,omitempty"`
+	PaidAt     string    `json:"paid_at"`
+	CreatedAt  time.Time `json:"created_at"`
 }
 
 type BalanceHistory struct {
