@@ -1,6 +1,7 @@
 'use strict';
 
 async function matches(el) {
+  await ensurePlayers();
   el.innerHTML = `
     <div class="page-header">
       <h2>Matches</h2>
@@ -13,7 +14,14 @@ async function matches(el) {
         <label>Total Bill <input type="number" id="mBill" step="0.01" min="0" placeholder="0.00"></label>
         <label>Notes <input type="text" id="mNotes" placeholder="optional"></label>
       </div>
-      <div style="display:flex;gap:8px">
+      <div style="margin-top:12px">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+          <strong>Attendees</strong>
+          <button class="btn btn-sm" onclick="addAttendeeRow()">+ Add</button>
+        </div>
+        <div id="attendeeRows"></div>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:12px">
         <button class="btn btn-primary" onclick="createMatch()">Create</button>
         <button class="btn" onclick="toggleNewMatchForm()">Cancel</button>
       </div>
@@ -21,6 +29,20 @@ async function matches(el) {
     <div id="matchList"></div>
   `;
   await refreshMatchList();
+}
+
+function addAttendeeRow() {
+  const container = document.getElementById('attendeeRows');
+  if (!container) return;
+  const row = document.createElement('div');
+  row.className = 'form-row attendee-row';
+  row.style.alignItems = 'center';
+  row.innerHTML = `
+    <label>Player <select class="att-player">${playerOptions()}</select></label>
+    <label>Guests <input type="number" class="att-guests" value="0" min="0" style="width:60px"></label>
+    <button class="btn btn-sm btn-danger" onclick="this.closest('.attendee-row').remove()">✕</button>
+  `;
+  container.appendChild(row);
 }
 
 function toggleNewMatchForm() {
@@ -119,7 +141,11 @@ async function createMatch() {
   const bill = parseFloat(document.getElementById('mBill').value);
   const notes = document.getElementById('mNotes').value || null;
   if (!date || !bill) { toast('Date and bill required', false); return; }
-  const res = await api('POST', '/matches', { date, total_bill: bill, notes });
+  const attendees = Array.from(document.querySelectorAll('.attendee-row')).map(row => ({
+    player_id: parseInt(row.querySelector('.att-player').value),
+    guest_count: parseInt(row.querySelector('.att-guests').value) || 0,
+  })).filter(a => a.player_id);
+  const res = await api('POST', '/matches', { date, total_bill: bill, notes, attendees });
   if (!res) return;
   const data = await res.json();
   if (!res.ok) { toast(data.error || 'Error', false); return; }

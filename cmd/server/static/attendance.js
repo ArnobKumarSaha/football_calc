@@ -2,12 +2,18 @@
 
 async function attendance(el) {
   await ensurePlayers();
+  const mRes = await api('GET', '/matches?limit=200');
+  const matchList = mRes ? await mRes.json() : [];
+  const matchOptions = matchList.map(m =>
+    `<option value="${m.id}">${m.date}${m.notes ? ' — ' + m.notes : ''}</option>`
+  ).join('');
+
   el.innerHTML = `
     <div class="page-header"><h2>Attendance</h2></div>
     <div class="card form-section">
       <h3>Add / Update Attendee</h3>
       <div class="form-row">
-        <label>Match ID <input type="number" id="attMatchId" placeholder="match id"></label>
+        <label>Match <select id="attMatchId"><option value="">— select match —</option>${matchOptions}</select></label>
         <label>Player <select id="attPlayerId">${playerOptions()}</select></label>
         <label>Guests <input type="number" id="attGuest" value="0" min="0"></label>
       </div>
@@ -23,7 +29,7 @@ async function upsertAttendee() {
   const matchId = document.getElementById('attMatchId').value;
   const playerId = document.getElementById('attPlayerId').value;
   const guestCount = parseInt(document.getElementById('attGuest').value) || 0;
-  if (!matchId || !playerId) { toast('Match ID and player required', false); return; }
+  if (!matchId || !playerId) { toast('Match and player required', false); return; }
   const res = await api('POST', '/matches/' + matchId + '/attendees', {
     player_id: parseInt(playerId), guest_count: guestCount,
   });
@@ -36,7 +42,7 @@ async function upsertAttendee() {
 async function removeAttendee() {
   const matchId = document.getElementById('attMatchId').value;
   const playerId = document.getElementById('attPlayerId').value;
-  if (!matchId || !playerId) { toast('Match ID and player required', false); return; }
+  if (!matchId || !playerId) { toast('Match and player required', false); return; }
   const res = await api('DELETE', '/matches/' + matchId + '/attendees/' + playerId);
   if (!res) return;
   toast(res.ok ? 'Removed' : 'Error', res.ok);

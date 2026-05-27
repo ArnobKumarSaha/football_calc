@@ -30,3 +30,11 @@ func Bootstrap(ctx context.Context, pool *pgxpool.Pool) error {
 	klog.Info("schema bootstrap done")
 	return nil
 }
+
+func CleanupData(ctx context.Context, pool *pgxpool.Pool) error {
+	_, err := pool.Exec(ctx, `TRUNCATE match_attendees, payments, matches, players RESTART IDENTITY CASCADE`)
+	if err != nil {
+		return fmt.Errorf("cleanup data: %w", err)
+	}
+	return nil
+}

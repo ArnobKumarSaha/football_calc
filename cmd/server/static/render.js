@@ -34,6 +34,7 @@ function shellHTML() {
     { page: 'payments',   label: 'Payments' },
     { page: 'balances',   label: 'Balances' },
     { page: 'reports',    label: 'Reports' },
+    { page: 'admin',      label: 'Admin' },
   ];
   return `
     <div class="app-layout">

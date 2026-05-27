@@ -1,6 +1,6 @@
 'use strict';
 
-const routes = { matches, players, attendance, payments, balances, reports };
+const routes = { matches, players, attendance, payments, balances, reports, admin };
 
 window.addEventListener('hashchange', () => {
   if (!state.token) return;

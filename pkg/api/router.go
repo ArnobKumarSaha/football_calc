@@ -66,6 +66,7 @@ func NewRouter(pool *pgxpool.Pool, adminPassword string, static fs.FS) http.Hand
 		r.Get("/api/auth", func(w http.ResponseWriter, _ *http.Request) {
 			writeJSON(w, http.StatusOK, map[string]bool{"ok": true})
 		})
+		r.Post("/api/admin/cleanup", CleanupData(pool))
 	})
 
 	r.Get("/api/reports/monthly", MonthlyReport(pool))

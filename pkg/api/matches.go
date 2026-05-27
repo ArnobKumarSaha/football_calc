@@ -36,9 +36,13 @@ func ListMatches(pool *pgxpool.Pool) http.HandlerFunc {
 func CreateMatch(pool *pgxpool.Pool) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		var body struct {
-			Date      string   `json:"date"`
-			TotalBill float64  `json:"total_bill"`
-			Notes     *string  `json:"notes"`
+			Date      string  `json:"date"`
+			TotalBill float64 `json:"total_bill"`
+			Notes     *string `json:"notes"`
+			Attendees []struct {
+				PlayerID   int `json:"player_id"`
+				GuestCount int `json:"guest_count"`
+			} `json:"attendees"`
 		}
 		if err := json.NewDecoder(r.Body).Decode(&body); err != nil || body.Date == "" || body.TotalBill <= 0 {
 			writeError(w, http.StatusBadRequest, "date and total_bill required")
@@ -48,6 +52,15 @@ func CreateMatch(pool *pgxpool.Pool) http.HandlerFunc {
 		if err != nil {
 			writeError(w, http.StatusInternalServerError, err.Error())
 			return
+		}
+		for _, a := range body.Attendees {
+			if a.PlayerID == 0 {
+				continue
+			}
+			if _, err := db.UpsertAttendee(r.Context(), pool, m.ID, a.PlayerID, a.GuestCount); err != nil {
+				writeError(w, http.StatusInternalServerError, err.Error())
+				return
+			}
 		}
 		writeJSON(w, http.StatusCreated, m)
 	}
