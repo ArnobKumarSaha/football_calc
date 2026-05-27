@@ -299,10 +299,40 @@ tr:hover td { background: #fafafa; }
 .loading { color: var(--muted); padding: 16px 0; }
 .empty { color: var(--muted); padding: 12px 0; font-style: italic; }
 
+.mobile-bottom-nav { display: none; }
+
 @media (max-width: 700px) {
   :root { --sidebar-w: 0px; }
   .sidebar { display: none; }
-  .content { margin-left: 0; padding: 16px; }
+  .content { margin-left: 0; padding: 16px; padding-bottom: 68px; }
   .detail-grid { grid-template-columns: 1fr; }
   .reports-grid { grid-template-columns: 1fr; }
+
+  .mobile-bottom-nav {
+    display: flex;
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: var(--sidebar-bg);
+    border-top: 1px solid #1e293b;
+    z-index: 100;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .mob-nav-item {
+    flex: 1;
+    min-width: 56px;
+    padding: 10px 4px;
+    color: #94a3b8;
+    text-align: center;
+    font-size: 11px;
+    font-weight: 500;
+    text-decoration: none;
+    border: none;
+    background: none;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .mob-nav-item:hover, .mob-nav-item.active { color: #fff; }
+  .mob-nav-item.active { border-top: 2px solid var(--accent); }
+  .mob-auth-btn { color: #f87171; }
 }

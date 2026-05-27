@@ -13,7 +13,7 @@ function currentPage() {
 }
 
 function setActiveNav(page) {
-  document.querySelectorAll('.nav-item').forEach(el => {
+  document.querySelectorAll('.nav-item, .mob-nav-item').forEach(el => {
     el.classList.toggle('active', el.dataset.page === page);
   });
 }
