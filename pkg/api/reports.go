@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/ArnobKumarSaha/football_calc/pkg/db"
@@ -50,19 +51,36 @@ func MatchesCSV(pool *pgxpool.Pool) http.HandlerFunc {
 			writeError(w, http.StatusInternalServerError, err.Error())
 			return
 		}
+		type matchRow struct {
+			date      string
+			totalBill float64
+			players   []string
+		}
+		order := []int{}
+		matches := map[int]*matchRow{}
+		for _, row := range rows {
+			if _, ok := matches[row.MatchID]; !ok {
+				matches[row.MatchID] = &matchRow{date: row.Date, totalBill: row.TotalBill}
+				order = append(order, row.MatchID)
+			}
+			name := row.PlayerName
+			if row.GuestCount > 0 {
+				name += fmt.Sprintf("+%d", row.GuestCount)
+			}
+			matches[row.MatchID].players = append(matches[row.MatchID].players, name)
+		}
+
 		w.Header().Set("Content-Type", "text/csv")
 		w.Header().Set("Content-Disposition", "attachment; filename=matches.csv")
 		cw := csv.NewWriter(w)
-		cw.Write([]string{"match_id", "date", "total_bill", "player_id", "player_name", "guest_count", "due"})
-		for _, row := range rows {
+		cw.Write([]string{"match_id", "date", "total_bill", "players"})
+		for _, id := range order {
+			m := matches[id]
 			cw.Write([]string{
-				strconv.Itoa(row.MatchID),
-				row.Date,
-				fmt.Sprintf("%.2f", row.TotalBill),
-				strconv.Itoa(row.PlayerID),
-				row.PlayerName,
-				strconv.Itoa(row.GuestCount),
-				fmt.Sprintf("%.2f", row.Due),
+				strconv.Itoa(id),
+				m.date,
+				fmt.Sprintf("%.2f", m.totalBill),
+				strings.Join(m.players, ", "),
 			})
 		}
 		cw.Flush()
