@@ -38,7 +38,6 @@ function shellHTML() {
     { page: 'matches',    label: 'Matches' },
     { page: 'players',    label: 'Players' },
     { page: 'attendance', label: 'Attendance' },
-    { page: 'payments',   label: 'Payments' },
     { page: 'balances',   label: 'Balances' },
   ];
   const bottomNav = [

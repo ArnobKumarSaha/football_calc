@@ -42,8 +42,12 @@ async function refreshPlayerList() {
             <td>${p.name}</td>
             <td>${balanceBadge(p.balance)}</td>
             <td class="row-actions">
+              <button class="btn btn-sm" onclick="togglePaymentHistory(${p.id}, this)">Show history</button>
               ${state.token ? `<button class="btn btn-sm btn-danger" onclick="deletePlayer(${p.id})">Delete</button>` : ''}
             </td>
+          </tr>
+          <tr id="ph-${p.id}" style="display:none">
+            <td colspan="4" style="padding:0"></td>
           </tr>
         `).join('')}
       </tbody>
@@ -62,6 +66,27 @@ async function createPlayer() {
   document.getElementById('newPlayerName').value = '';
   toggleNewPlayerForm();
   await refreshPlayerList();
+}
+
+async function togglePaymentHistory(id, btn) {
+  const row = document.getElementById('ph-' + id);
+  if (row.style.display !== 'none') {
+    row.style.display = 'none';
+    btn.textContent = 'Show history';
+    return;
+  }
+  btn.textContent = 'Hide history';
+  row.style.display = '';
+  const td = row.querySelector('td');
+  td.innerHTML = '<p class="loading" style="padding:12px">Loading…</p>';
+  const res = await api('GET', '/payments?player_id=' + id);
+  if (!res) { td.innerHTML = ''; return; }
+  const list = await res.json();
+  if (!list.length) { td.innerHTML = '<p class="empty" style="padding:12px">No payments.</p>'; return; }
+  const rows = list.map(p =>
+    `<tr><td>${p.paid_at}</td><td>৳${p.amount.toFixed(2)}</td><td>${p.match_id || '—'}</td></tr>`
+  );
+  td.innerHTML = `<div style="padding:8px 16px">${renderTable(['Date', 'Amount', 'Match'], rows)}</div>`;
 }
 
 async function deletePlayer(id) {
