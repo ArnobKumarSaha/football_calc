@@ -1,0 +1,43 @@
+'use strict';
+
+async function attendance(el) {
+  await ensurePlayers();
+  el.innerHTML = `
+    <div class="page-header"><h2>Attendance</h2></div>
+    <div class="card form-section">
+      <h3>Add / Update Attendee</h3>
+      <div class="form-row">
+        <label>Match ID <input type="number" id="attMatchId" placeholder="match id"></label>
+        <label>Player <select id="attPlayerId">${playerOptions()}</select></label>
+        <label>Guests <input type="number" id="attGuest" value="0" min="0"></label>
+      </div>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-primary" onclick="upsertAttendee()">Add / Update</button>
+        <button class="btn btn-danger" onclick="removeAttendee()">Remove</button>
+      </div>
+    </div>
+  `;
+}
+
+async function upsertAttendee() {
+  const matchId = document.getElementById('attMatchId').value;
+  const playerId = document.getElementById('attPlayerId').value;
+  const guestCount = parseInt(document.getElementById('attGuest').value) || 0;
+  if (!matchId || !playerId) { toast('Match ID and player required', false); return; }
+  const res = await api('POST', '/matches/' + matchId + '/attendees', {
+    player_id: parseInt(playerId), guest_count: guestCount,
+  });
+  if (!res) return;
+  const data = await res.json();
+  if (!res.ok) { toast(data.error || 'Error', false); return; }
+  toast('Attendee saved');
+}
+
+async function removeAttendee() {
+  const matchId = document.getElementById('attMatchId').value;
+  const playerId = document.getElementById('attPlayerId').value;
+  if (!matchId || !playerId) { toast('Match ID and player required', false); return; }
+  const res = await api('DELETE', '/matches/' + matchId + '/attendees/' + playerId);
+  if (!res) return;
+  toast(res.ok ? 'Removed' : 'Error', res.ok);
+}

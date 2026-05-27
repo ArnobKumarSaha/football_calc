@@ -1,5 +1,4 @@
 bin/
-server
 *.exe
 *.test
 *.out
@@ -9,3 +8,4 @@ server
 .vscode/
 
 *.log
+/server

@@ -11,6 +11,7 @@
 # Set required env vars
 export DATABASE_URL="postgres://user:password@localhost:5432/football_calc?sslmode=disable"
 export ADMIN_PASSWORD="changeme"
+export PORT=9093
 
 # Build and run
 make build
