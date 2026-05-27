@@ -29,7 +29,7 @@ func GetPlayerBalance(ctx context.Context, pool *pgxpool.Pool, playerID int) (*m
 		 JOIN matches m ON m.id=ma.match_id AND m.deleted_at IS NULL
 		 LEFT JOIN payments pay ON pay.player_id=ma.player_id AND pay.match_id=ma.match_id
 		 WHERE ma.player_id=$1
-		 GROUP BY ma.match_id, m.date, ma.guest_count, ma.id, m.total_bill
+		 GROUP BY ma.match_id, m.id, m.date, ma.guest_count, ma.id, m.total_bill
 		 ORDER BY m.date ASC`, playerID)
 	if err != nil {
 		return nil, fmt.Errorf("balance history: %w", err)
