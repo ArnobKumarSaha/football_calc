@@ -4,7 +4,7 @@ async function players(el) {
   el.innerHTML = `
     <div class="page-header">
       <h2>Players</h2>
-      <button class="btn btn-primary" onclick="toggleNewPlayerForm()">+ Add Player</button>
+      ${state.token ? `<button class="btn btn-primary" onclick="toggleNewPlayerForm()">+ Add Player</button>` : ''}
     </div>
     <div id="newPlayerForm" style="display:none" class="card form-section">
       <div class="form-row">
@@ -42,7 +42,7 @@ async function refreshPlayerList() {
             <td>${p.name}</td>
             <td>${balanceBadge(p.balance)}</td>
             <td class="row-actions">
-              <button class="btn btn-sm btn-danger" onclick="deletePlayer(${p.id})">Delete</button>
+              ${state.token ? `<button class="btn btn-sm btn-danger" onclick="deletePlayer(${p.id})">Delete</button>` : ''}
             </td>
           </tr>
         `).join('')}

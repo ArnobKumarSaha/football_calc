@@ -5,7 +5,7 @@ async function matches(el) {
   el.innerHTML = `
     <div class="page-header">
       <h2>Matches</h2>
-      <button class="btn btn-primary" onclick="toggleNewMatchForm()">+ New Match</button>
+      ${state.token ? `<button class="btn btn-primary" onclick="toggleNewMatchForm()">+ New Match</button>` : ''}
     </div>
     <div id="newMatchForm" style="display:none" class="card form-section">
       <h3>New Match</h3>
@@ -68,8 +68,10 @@ async function refreshMatchList() {
         <div style="display:flex;align-items:center;gap:16px">
           <span class="match-bill">৳${m.total_bill.toFixed(2)}</span>
           <div class="match-actions">
+            ${state.token ? `
             <button class="btn btn-sm" onclick="event.stopPropagation();showEditMatch(${m.id},'${m.date}',${m.total_bill},'${(m.notes||'').replace(/'/g,"\\'")}')">Edit</button>
             <button class="btn btn-sm btn-danger" onclick="event.stopPropagation();deleteMatch(${m.id})">Delete</button>
+            ` : ''}
             <span class="toggle-icon" id="ti-${m.id}">▼</span>
           </div>
         </div>

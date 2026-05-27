@@ -1,6 +1,16 @@
 'use strict';
 
 async function attendance(el) {
+  if (!state.token) {
+    el.innerHTML = `
+      <div class="page-header"><h2>Attendance</h2></div>
+      <div class="card form-section">
+        <p>Admin login required to manage attendance.</p>
+        <button class="btn btn-primary" onclick="openLoginModal()">Login</button>
+      </div>
+    `;
+    return;
+  }
   await ensurePlayers();
   const mRes = await api('GET', '/matches?limit=200');
   const matchList = mRes ? await mRes.json() : [];

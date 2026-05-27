@@ -2,28 +2,35 @@
 
 function renderApp() {
   const root = document.getElementById('app');
-  if (!state.token) {
-    root.innerHTML = loginHTML();
-    return;
-  }
   root.innerHTML = shellHTML();
   const page = currentPage();
   setActiveNav(page);
   loadPage(page);
 }
 
-function loginHTML() {
+function loginModalHTML() {
   return `
-    <div class="login-wrap">
+    <div class="modal-overlay" id="loginModal" onclick="if(event.target===this)closeLoginModal()">
       <div class="login-card">
         <div class="login-logo">⚽ Football Calc</div>
         <p class="login-sub">Admin Login</p>
         <input type="password" id="pwd" class="login-input" placeholder="Admin password"
                onkeydown="if(event.key==='Enter') login()">
         <button class="btn btn-primary w-full" onclick="login()">Login</button>
+        <button class="btn w-full" style="margin-top:8px" onclick="closeLoginModal()">Cancel</button>
       </div>
     </div>
   `;
+}
+
+function openLoginModal() {
+  if (document.getElementById('loginModal')) return;
+  document.body.insertAdjacentHTML('beforeend', loginModalHTML());
+  document.getElementById('pwd').focus();
+}
+
+function closeLoginModal() {
+  document.getElementById('loginModal')?.remove();
 }
 
 function shellHTML() {
@@ -36,8 +43,11 @@ function shellHTML() {
   ];
   const bottomNav = [
     { page: 'reports', label: 'Reports' },
-    { page: 'admin',   label: 'Admin' },
+    ...(state.token ? [{ page: 'admin', label: 'Admin' }] : []),
   ];
+  const authBtn = state.token
+    ? `<button class="logout-btn" onclick="logout()">Logout</button>`
+    : `<button class="logout-btn" onclick="openLoginModal()">Login</button>`;
   return `
     <div class="app-layout">
       <aside class="sidebar">
@@ -51,7 +61,7 @@ function shellHTML() {
           ${bottomNav.map(n =>
             `<a href="#${n.page}" class="nav-item" data-page="${n.page}">${n.label}</a>`
           ).join('')}
-          <button class="logout-btn" onclick="logout()">Logout</button>
+          ${authBtn}
         </nav>
       </aside>
       <main class="content">

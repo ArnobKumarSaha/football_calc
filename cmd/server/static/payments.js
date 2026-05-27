@@ -4,6 +4,7 @@ async function payments(el) {
   await ensurePlayers();
   el.innerHTML = `
     <div class="page-header"><h2>Payments</h2></div>
+    ${state.token ? `
     <div class="card form-section">
       <h3>Record Payment</h3>
       <div class="form-row">
@@ -15,6 +16,7 @@ async function payments(el) {
       </div>
       <button class="btn btn-primary" onclick="createPayment()">Record</button>
     </div>
+    ` : ''}
     <div class="card">
       <h3>Payment History</h3>
       <div class="form-row">

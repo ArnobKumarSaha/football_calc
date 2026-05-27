@@ -5,8 +5,9 @@ async function login() {
   if (!pwd) return;
   state.token = pwd;
   const res = await api('GET', '/auth');
-  if (!res) return;
+  if (!res) { state.token = ''; return; }
   localStorage.setItem('token', pwd);
+  closeLoginModal();
   renderApp();
 }
 

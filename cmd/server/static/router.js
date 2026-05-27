@@ -3,7 +3,6 @@
 const routes = { matches, players, attendance, payments, balances, reports, admin };
 
 window.addEventListener('hashchange', () => {
-  if (!state.token) return;
   const page = currentPage();
   setActiveNav(page);
   loadPage(page);

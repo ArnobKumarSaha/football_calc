@@ -17,13 +17,15 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.5; }
 
-/* ── Login ───────────────────────────────────────────────────── */
-.login-wrap {
-  min-height: 100vh;
+/* ── Login modal ─────────────────────────────────────────────── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.6);
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--sidebar-bg);
+  z-index: 1000;
 }
 .login-card {
   background: var(--card);

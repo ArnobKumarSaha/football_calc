@@ -1,6 +1,16 @@
 'use strict';
 
 async function admin(el) {
+  if (!state.token) {
+    el.innerHTML = `
+      <div class="page-header"><h2>Admin</h2></div>
+      <div class="card form-section">
+        <p>Admin login required.</p>
+        <button class="btn btn-primary" onclick="openLoginModal()">Login</button>
+      </div>
+    `;
+    return;
+  }
   el.innerHTML = `
     <div class="page-header"><h2>Admin</h2></div>
     <div class="card form-section">
