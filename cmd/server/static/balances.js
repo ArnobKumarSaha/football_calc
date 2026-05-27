@@ -25,11 +25,19 @@ async function loadPlayerDetail(card) {
   const name = card.querySelector('.balance-name').textContent;
   const el = document.getElementById('playerDetail');
   el.innerHTML = '<p class="loading">Loading…</p>';
-  const res = await api('GET', '/players/' + id + '/balance');
-  if (!res) return;
-  const h = await res.json();
-  const rows = (h.matches || []).map(m =>
+  const [balRes, payRes] = await Promise.all([
+    api('GET', '/players/' + id + '/balance'),
+    api('GET', '/payments?player_id=' + id),
+  ]);
+  if (!balRes) return;
+  const h = await balRes.json();
+  const allPayments = payRes ? await payRes.json() : [];
+
+  const matchRows = (h.matches || []).map(m =>
     `<tr><td>${m.match_id}</td><td>${m.match_date}</td><td>৳${m.due != null ? m.due.toFixed(2) : '—'}</td><td>৳${m.paid.toFixed(2)}</td></tr>`
+  );
+  const payRows = allPayments.map(p =>
+    `<tr><td>${p.paid_at}</td><td>৳${p.amount.toFixed(2)}</td><td>${p.match_id || '—'}</td></tr>`
   );
   el.innerHTML = `
     <div class="card">
@@ -41,7 +49,16 @@ async function loadPlayerDetail(card) {
           <span>Balance: ${balanceBadge(h.balance)}</span>
         </div>
       </div>
-      ${renderTable(['Match', 'Date', 'Due', 'Paid'], rows)}
+      <div class="detail-grid">
+        <div>
+          <h4 style="margin-bottom:8px">Match History</h4>
+          ${matchRows.length ? renderTable(['Match', 'Date', 'Due', 'Paid'], matchRows) : '<p class="empty">No matches.</p>'}
+        </div>
+        <div>
+          <h4 style="margin-bottom:8px">Payments</h4>
+          ${payRows.length ? renderTable(['Date', 'Amount', 'Match'], payRows) : '<p class="empty">No payments.</p>'}
+        </div>
+      </div>
     </div>
   `;
 }
