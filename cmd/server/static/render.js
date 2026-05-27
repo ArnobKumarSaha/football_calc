@@ -68,15 +68,8 @@ function shellHTML() {
         <div id="page"></div>
       </main>
     </div>
-    <nav class="mobile-bottom-nav" id="mobileNav">
-      ${[...mainNav, ...bottomNav].map(n =>
-        `<a href="#${n.page}" class="mob-nav-item" data-page="${n.page}">${n.label}</a>`
-      ).join('')}
-      <button class="mob-nav-item mob-auth-btn" id="mobAuthBtn"
-        onclick="${state.token ? 'logout()' : 'openLoginModal()'}">
-        ${state.token ? 'Logout' : 'Login'}
-      </button>
-    </nav>
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+    <button class="hamburger" id="hamburgerBtn" onclick="toggleSidebar()">&#9776;</button>
   `;
 }
 
