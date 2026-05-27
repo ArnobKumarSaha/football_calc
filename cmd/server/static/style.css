@@ -73,6 +73,11 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-
   display: flex;
   flex-direction: column;
 }
+.sidebar-nav-bottom {
+  flex: 0;
+  padding-bottom: 0;
+  border-top: 1px solid rgba(255,255,255,.08);
+}
 .nav-item {
   display: block;
   padding: 10px 20px;

@@ -27,25 +27,32 @@ function loginHTML() {
 }
 
 function shellHTML() {
-  const navItems = [
+  const mainNav = [
     { page: 'matches',    label: 'Matches' },
     { page: 'players',    label: 'Players' },
     { page: 'attendance', label: 'Attendance' },
     { page: 'payments',   label: 'Payments' },
     { page: 'balances',   label: 'Balances' },
-    { page: 'reports',    label: 'Reports' },
-    { page: 'admin',      label: 'Admin' },
+  ];
+  const bottomNav = [
+    { page: 'reports', label: 'Reports' },
+    { page: 'admin',   label: 'Admin' },
   ];
   return `
     <div class="app-layout">
       <aside class="sidebar">
         <div class="sidebar-logo">⚽ Football Calc</div>
         <nav class="sidebar-nav">
-          ${navItems.map(n =>
+          ${mainNav.map(n =>
             `<a href="#${n.page}" class="nav-item" data-page="${n.page}">${n.label}</a>`
           ).join('')}
         </nav>
-        <button class="logout-btn" onclick="logout()">Logout</button>
+        <nav class="sidebar-nav sidebar-nav-bottom">
+          ${bottomNav.map(n =>
+            `<a href="#${n.page}" class="nav-item" data-page="${n.page}">${n.label}</a>`
+          ).join('')}
+          <button class="logout-btn" onclick="logout()">Logout</button>
+        </nav>
       </aside>
       <main class="content">
         <div id="page"></div>

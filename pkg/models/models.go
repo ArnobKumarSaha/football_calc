@@ -53,13 +53,13 @@ type Payment struct {
 }
 
 type BalanceHistory struct {
-	PlayerID   int                  `json:"player_id"`
-	PlayerName string               `json:"player_name"`
-	Matches    []MatchBalanceEntry  `json:"matches"`
-	Standalone []Payment            `json:"standalone_payments"`
-	TotalDue   float64              `json:"total_due"`
-	TotalPaid  float64              `json:"total_paid"`
-	Balance    float64              `json:"balance"`
+	PlayerID   int                 `json:"player_id"`
+	PlayerName string              `json:"player_name"`
+	Matches    []MatchBalanceEntry `json:"matches"`
+	Standalone []Payment           `json:"standalone_payments"`
+	TotalDue   float64             `json:"total_due"`
+	TotalPaid  float64             `json:"total_paid"`
+	Balance    float64             `json:"balance"`
 }
 
 type MatchBalanceEntry struct {

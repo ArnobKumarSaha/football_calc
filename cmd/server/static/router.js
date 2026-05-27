@@ -10,7 +10,7 @@ window.addEventListener('hashchange', () => {
 });
 
 function currentPage() {
-  return location.hash.slice(1) || 'matches';
+  return location.hash.slice(1) || 'balances';
 }
 
 function setActiveNav(page) {
