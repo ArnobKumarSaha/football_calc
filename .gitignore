@@ -1,3 +1,11 @@
-server
 bin/
+server
+*.exe
 *.test
+*.out
+
+.env
+.idea/
+.vscode/
+
+*.log
