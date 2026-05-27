@@ -72,7 +72,7 @@ async function togglePaymentHistory(id, btn) {
   const row = document.getElementById('ph-' + id);
   if (row.style.display !== 'none') {
     row.style.display = 'none';
-    btn.textContent = 'Show history';
+    btn.textContent = 'Show payment history';
     return;
   }
   btn.textContent = 'Hide payment history';
