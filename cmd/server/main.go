@@ -10,6 +10,7 @@ import (
 
 	"github.com/ArnobKumarSaha/football_calc/pkg/api"
 	"github.com/ArnobKumarSaha/football_calc/pkg/db"
+	"github.com/joho/godotenv"
 	"github.com/spf13/cobra"
 	"k8s.io/klog/v2"
 )
@@ -29,6 +30,8 @@ func main() {
 }
 
 func run(_ *cobra.Command, _ []string) error {
+	_ = godotenv.Load()
+
 	databaseURL := os.Getenv("DATABASE_URL")
 	if databaseURL == "" {
 		return fmt.Errorf("DATABASE_URL not set")

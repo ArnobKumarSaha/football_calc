@@ -5,6 +5,7 @@ go 1.24
 require (
 	github.com/go-chi/chi/v5 v5.2.1
 	github.com/jackc/pgx/v5 v5.7.4
+	github.com/joho/godotenv v1.5.1
 	github.com/spf13/cobra v1.9.1
 	k8s.io/klog/v2 v2.130.1
 )
