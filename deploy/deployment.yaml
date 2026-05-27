@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: football-calc
+  namespace: football-calc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: football-calc
+  template:
+    metadata:
+      labels:
+        app: football-calc
+    spec:
+      containers:
+        - name: football-calc
+          image: ghcr.io/arnobkumarsaha/football-calc:latest
+          ports:
+            - containerPort: 8080
+          envFrom:
+            - secretRef:
+                name: football-calc-secret
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /readyz
+              port: 8080
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 200m
+              memory: 128Mi
