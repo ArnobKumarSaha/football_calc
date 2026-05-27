@@ -9,7 +9,7 @@ async function balances(el) {
     <div class="page-header"><h2>Balances</h2></div>
     <div class="balances-grid">
       ${list.map(p => `
-        <div class="balance-card card" onclick="loadPlayerDetail(${p.id}, '${p.name.replace(/'/g,"\\'")}')">
+        <div class="balance-card card" data-id="${p.id}" onclick="loadPlayerDetail(this)">
           <div class="balance-name">${p.name}</div>
           <div class="balance-amount">${balanceBadge(p.balance)}</div>
           <div class="balance-hint">click for history</div>
@@ -20,7 +20,9 @@ async function balances(el) {
   `;
 }
 
-async function loadPlayerDetail(id, name) {
+async function loadPlayerDetail(card) {
+  const id = card.dataset.id;
+  const name = card.querySelector('.balance-name').textContent;
   const el = document.getElementById('playerDetail');
   el.innerHTML = '<p class="loading">Loading…</p>';
   const res = await api('GET', '/players/' + id + '/balance');

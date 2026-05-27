@@ -42,30 +42,13 @@ async function refreshPlayerList() {
             <td>${p.name}</td>
             <td>${balanceBadge(p.balance)}</td>
             <td class="row-actions">
-              <button class="btn btn-sm" onclick="showEditPlayer(${p.id}, '${p.name.replace(/'/g,"\\'")}')">Edit</button>
               <button class="btn btn-sm btn-danger" onclick="deletePlayer(${p.id})">Delete</button>
-            </td>
-          </tr>
-          <tr id="pedit-${p.id}" style="display:none">
-            <td colspan="4">
-              <div class="inline-edit">
-                <input type="text" id="pname-${p.id}" value="${p.name}"
-                       onkeydown="if(event.key==='Enter') updatePlayer(${p.id})">
-                <button class="btn btn-primary btn-sm" onclick="updatePlayer(${p.id})">Save</button>
-                <button class="btn btn-sm" onclick="document.getElementById('pedit-${p.id}').style.display='none'">Cancel</button>
-              </div>
             </td>
           </tr>
         `).join('')}
       </tbody>
     </table>
   `;
-}
-
-function showEditPlayer(id, name) {
-  const row = document.getElementById('pedit-' + id);
-  row.style.display = row.style.display === 'none' ? 'table-row' : 'none';
-  if (row.style.display !== 'none') document.getElementById('pname-' + id)?.focus();
 }
 
 async function createPlayer() {
@@ -78,16 +61,6 @@ async function createPlayer() {
   toast(name + ' added');
   document.getElementById('newPlayerName').value = '';
   toggleNewPlayerForm();
-  await refreshPlayerList();
-}
-
-async function updatePlayer(id) {
-  const name = document.getElementById('pname-' + id)?.value.trim();
-  if (!name) { toast('Name required', false); return; }
-  const res = await api('PATCH', '/players/' + id, { name });
-  if (!res) return;
-  if (!res.ok) { const d = await res.json(); toast(d.error || 'Error', false); return; }
-  toast('Player updated');
   await refreshPlayerList();
 }
 
