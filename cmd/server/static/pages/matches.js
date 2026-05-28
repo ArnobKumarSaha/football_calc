@@ -17,7 +17,7 @@ async function matches(el) {
       <div style="margin-top:12px">
         <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
           <strong>Attendees</strong>
-          <button class="btn btn-sm" onclick="addAttendeeRow()">+ Add</button>
+          <button class="btn btn-sm" onclick="addAttendeeRow('attendeeRows')">+ Add</button>
         </div>
         <div id="attendeeRows"></div>
       </div>
@@ -31,8 +31,8 @@ async function matches(el) {
   await refreshMatchList();
 }
 
-function addAttendeeRow() {
-  const container = document.getElementById('attendeeRows');
+function addAttendeeRow(containerId) {
+  const container = document.getElementById(containerId);
   if (!container) return;
   const row = document.createElement('div');
   row.className = 'form-row attendee-row';
@@ -63,13 +63,18 @@ async function refreshMatchList() {
         <div>
           <span class="match-id">#${m.id}</span>
           <span class="match-date">${m.date}</span>
-          ${m.notes ? `<span class="match-notes">(${m.notes})</span>` : ''}
+          ${m.notes ? `<span class="match-notes">(${escapeHTML(m.notes)})</span>` : ''}
         </div>
         <div style="display:flex;align-items:center;gap:16px">
           <span class="match-bill">৳${m.total_bill.toFixed(2)}</span>
           <div class="match-actions">
             ${state.token ? `
-            <button class="btn btn-sm" onclick="event.stopPropagation();showEditMatch(${m.id},'${m.date}',${m.total_bill},'${(m.notes||'').replace(/'/g,"\\'")}')">Edit</button>
+            <button class="btn btn-sm"
+              data-match-id="${m.id}"
+              data-match-date="${m.date}"
+              data-match-bill="${m.total_bill}"
+              data-match-notes="${escapeHTML(m.notes || '')}"
+              onclick="event.stopPropagation();showEditMatchBtn(this)">Edit</button>
             <button class="btn btn-sm btn-danger" onclick="event.stopPropagation();deleteMatch(${m.id})">Delete</button>
             ` : ''}
             <span class="toggle-icon" id="ti-${m.id}">▼</span>
@@ -98,10 +103,10 @@ async function toggleMatchDetail(id) {
   const md = await res.json();
   detail.dataset.loaded = '1';
   const attendeeRows = (md.attendees || []).map(a =>
-    `<tr><td>${a.player_name}</td><td>${a.guest_count}</td><td>৳${a.due.toFixed(2)}</td></tr>`
+    `<tr><td>${escapeHTML(a.player_name)}</td><td>${a.guest_count}</td><td>৳${a.due.toFixed(2)}</td></tr>`
   );
   const paymentRows = (md.payments || []).map(p =>
-    `<tr><td>${p.player_name}</td><td>৳${p.amount.toFixed(2)}</td><td>${p.paid_at}</td><td>${p.notes||'—'}</td></tr>`
+    `<tr><td>${escapeHTML(p.player_name)}</td><td>৳${p.amount.toFixed(2)}</td><td>${p.paid_at}</td><td>${escapeHTML(p.notes || '—')}</td></tr>`
   );
   detail.innerHTML = `
     <div class="detail-grid">
@@ -115,6 +120,14 @@ async function toggleMatchDetail(id) {
       </div>
     </div>
   `;
+}
+
+function showEditMatchBtn(btn) {
+  const id = parseInt(btn.dataset.matchId);
+  const date = btn.dataset.matchDate;
+  const bill = parseFloat(btn.dataset.matchBill);
+  const notes = btn.dataset.matchNotes;
+  showEditMatch(id, date, bill, notes);
 }
 
 async function showEditMatch(id, date, bill, notes) {
@@ -133,12 +146,12 @@ async function showEditMatch(id, date, bill, notes) {
     <div class="form-row">
       <label>Date <input type="date" id="em-date-${id}" value="${date}"></label>
       <label>Bill <input type="number" id="em-bill-${id}" step="0.01" value="${bill}"></label>
-      <label>Notes <input type="text" id="em-notes-${id}" value="${notes}"></label>
+      <label>Notes <input type="text" id="em-notes-${id}" value="${escapeHTML(notes)}"></label>
     </div>
     <div style="margin-top:12px">
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
         <strong>Attendees</strong>
-        <button class="btn btn-sm" onclick="addEditAttendeeRow('em-att-${id}')">+ Add</button>
+        <button class="btn btn-sm" onclick="addAttendeeRow('em-att-${id}')">+ Add</button>
       </div>
       <div id="em-att-${id}">
         ${attendees.map(a => `
@@ -157,20 +170,6 @@ async function showEditMatch(id, date, bill, notes) {
   `;
   form.querySelector('#em-att-' + id).dataset.originals = JSON.stringify(attendees.map(a => a.player_id));
   card.appendChild(form);
-}
-
-function addEditAttendeeRow(containerId) {
-  const container = document.getElementById(containerId);
-  if (!container) return;
-  const row = document.createElement('div');
-  row.className = 'form-row attendee-row';
-  row.style.alignItems = 'center';
-  row.innerHTML = `
-    <label>Player <select class="att-player">${playerOptions()}</select></label>
-    <label>Guests <input type="number" class="att-guests" value="0" min="0" style="width:60px"></label>
-    <button class="btn btn-sm btn-danger" onclick="this.closest('.attendee-row').remove()">✕</button>
-  `;
-  container.appendChild(row);
 }
 
 async function createMatch() {
@@ -201,7 +200,7 @@ async function updateMatch(id) {
   if (n !== undefined) body.notes = n || null;
   const res = await api('PATCH', '/matches/' + id, body);
   if (!res) return;
-  if (!res.ok) { const d = await res.json(); toast(d.error || 'Error', false); return; }
+  if (!res.ok) { const errData = await res.json(); toast(errData.error || 'Error', false); return; }
 
   const container = document.getElementById('em-att-' + id);
   if (container) {

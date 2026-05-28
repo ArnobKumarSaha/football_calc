@@ -16,7 +16,7 @@ async function payments(el) {
   const mRes = await api('GET', '/matches?limit=200');
   const matchList = mRes ? await mRes.json() : [];
   const matchOptions = '<option value="">— no match —</option>' +
-    matchList.map(m => `<option value="${m.id}">${m.date}${m.notes ? ' — ' + m.notes : ''}</option>`).join('');
+    matchList.map(m => `<option value="${m.id}">${m.date}${m.notes ? ' — ' + escapeHTML(m.notes) : ''}</option>`).join('');
 
   el.innerHTML = `
     <div class="page-header"><h2>Record Payment</h2></div>

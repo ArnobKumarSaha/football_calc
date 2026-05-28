@@ -10,7 +10,7 @@ async function balances(el) {
     <div class="balances-grid">
       ${list.map(p => `
         <div class="balance-card card" data-id="${p.id}" onclick="loadPlayerDetail(this)">
-          <div class="balance-name">${p.name}</div>
+          <div class="balance-name">${escapeHTML(p.name)}</div>
           <div class="balance-amount">${balanceBadge(p.balance)}</div>
           <div class="balance-hint">click for history</div>
         </div>

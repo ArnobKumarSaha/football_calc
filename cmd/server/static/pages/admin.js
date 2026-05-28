@@ -55,7 +55,7 @@ async function adminRefreshPlayers() {
         ${list.map(p => `
           <tr>
             <td>${p.id}</td>
-            <td>${p.name}</td>
+            <td>${escapeHTML(p.name)}</td>
             <td>${balanceBadge(p.balance)}</td>
             <td class="row-actions">
               <button class="btn btn-sm btn-danger" onclick="adminDeletePlayer(${p.id})">Delete</button>
