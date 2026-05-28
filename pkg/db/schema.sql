@@ -50,7 +50,8 @@ EXCEPTION WHEN duplicate_object THEN NULL;
 END $$;
 
 DO $$ BEGIN
-    ALTER TABLE payments ADD CONSTRAINT payments_amount_positive CHECK (amount > 0);
+    ALTER TABLE payments DROP CONSTRAINT IF EXISTS payments_amount_positive;
+    ALTER TABLE payments ADD CONSTRAINT payments_amount_nonzero CHECK (amount <> 0);
 EXCEPTION WHEN duplicate_object THEN NULL;
 END $$;
 
