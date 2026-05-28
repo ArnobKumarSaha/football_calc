@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS players (
     id         SERIAL PRIMARY KEY,
-    name       TEXT NOT NULL UNIQUE,
+    name       TEXT NOT NULL,
     created_at TIMESTAMPTZ DEFAULT now(),
     deleted_at TIMESTAMPTZ
 );
@@ -31,3 +31,30 @@ CREATE TABLE IF NOT EXISTS payments (
     paid_at    DATE NOT NULL,
     created_at TIMESTAMPTZ DEFAULT now()
 );
+
+-- Drop old full-table unique on players.name if present; replaced by partial index below.
+ALTER TABLE players DROP CONSTRAINT IF EXISTS players_name_key;
+
+-- Only active (non-deleted) players must have unique names.
+CREATE UNIQUE INDEX IF NOT EXISTS players_name_active ON players(name) WHERE deleted_at IS NULL;
+
+-- Indexes on FK columns not covered by an existing index.
+CREATE INDEX IF NOT EXISTS payments_player_id_idx ON payments(player_id);
+CREATE INDEX IF NOT EXISTS payments_match_id_idx  ON payments(match_id);
+CREATE INDEX IF NOT EXISTS attendees_player_id_idx ON match_attendees(player_id);
+
+-- CHECK constraints (idempotent: no-op if already present).
+DO $$ BEGIN
+    ALTER TABLE matches ADD CONSTRAINT matches_total_bill_positive CHECK (total_bill > 0);
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
+
+DO $$ BEGIN
+    ALTER TABLE payments ADD CONSTRAINT payments_amount_positive CHECK (amount > 0);
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
+
+DO $$ BEGIN
+    ALTER TABLE match_attendees ADD CONSTRAINT attendees_guest_count_nonneg CHECK (guest_count >= 0);
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
