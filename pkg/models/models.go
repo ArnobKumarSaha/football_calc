@@ -2,6 +2,7 @@ package models
 
 import "time"
 
+// Player maps to the players table.
 type Player struct {
 	ID        int        `json:"id"`
 	Name      string     `json:"name"`
@@ -9,11 +10,7 @@ type Player struct {
 	DeletedAt *time.Time `json:"deleted_at,omitempty"`
 }
 
-type PlayerWithBalance struct {
-	Player
-	Balance float64 `json:"balance"`
-}
-
+// Match maps to the matches table; TotalBill is split among attendees.
 type Match struct {
 	ID        int        `json:"id"`
 	Date      string     `json:"date"`
@@ -23,6 +20,7 @@ type Match struct {
 	DeletedAt *time.Time `json:"deleted_at,omitempty"`
 }
 
+// MatchAttendee maps to the match_attendees table; GuestCount adds extra heads to the due calc.
 type MatchAttendee struct {
 	ID         int `json:"id"`
 	MatchID    int `json:"match_id"`
@@ -30,18 +28,7 @@ type MatchAttendee struct {
 	GuestCount int `json:"guest_count"`
 }
 
-type MatchAttendeeWithDue struct {
-	MatchAttendee
-	PlayerName string  `json:"player_name"`
-	Due        float64 `json:"due"`
-}
-
-type MatchDetail struct {
-	Match
-	Attendees []MatchAttendeeWithDue `json:"attendees"`
-	Payments  []Payment              `json:"payments"`
-}
-
+// Payment maps to the payments table; MatchID is nil for standalone (non-match) payments.
 type Payment struct {
 	ID         int       `json:"id"`
 	PlayerID   int       `json:"player_id"`
@@ -51,21 +38,4 @@ type Payment struct {
 	Notes      *string   `json:"notes,omitempty"`
 	PaidAt     string    `json:"paid_at"`
 	CreatedAt  time.Time `json:"created_at"`
-}
-
-type BalanceHistory struct {
-	PlayerID   int                 `json:"player_id"`
-	PlayerName string              `json:"player_name"`
-	Matches    []MatchBalanceEntry `json:"matches"`
-	Standalone []Payment           `json:"standalone_payments"`
-	TotalDue   float64             `json:"total_due"`
-	TotalPaid  float64             `json:"total_paid"`
-	Balance    float64             `json:"balance"`
-}
-
-type MatchBalanceEntry struct {
-	MatchID   int     `json:"match_id"`
-	MatchDate string  `json:"match_date"`
-	Due       float64 `json:"due"`
-	Paid      float64 `json:"paid"`
 }

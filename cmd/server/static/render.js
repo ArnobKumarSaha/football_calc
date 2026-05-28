@@ -36,7 +36,6 @@ function closeLoginModal() {
 function shellHTML() {
   const mainNav = [
     { page: 'matches',    label: 'Matches' },
-    { page: 'players',    label: 'Players' },
     { page: 'attendance', label: 'Attendance' },
     { page: 'payments',   label: 'Payment' },
     { page: 'balances',   label: 'Balances' },
