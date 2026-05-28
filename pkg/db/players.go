@@ -8,25 +8,6 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
-func ListPlayers(ctx context.Context, pool *pgxpool.Pool) ([]models.Player, error) {
-	rows, err := pool.Query(ctx,
-		`SELECT id, name, created_at, deleted_at FROM players WHERE deleted_at IS NULL ORDER BY name`)
-	if err != nil {
-		return nil, fmt.Errorf("list players: %w", err)
-	}
-	defer rows.Close()
-
-	var players []models.Player
-	for rows.Next() {
-		var p models.Player
-		if err := rows.Scan(&p.ID, &p.Name, &p.CreatedAt, &p.DeletedAt); err != nil {
-			return nil, err
-		}
-		players = append(players, p)
-	}
-	return players, rows.Err()
-}
-
 func GetPlayer(ctx context.Context, pool *pgxpool.Pool, id int) (*models.Player, error) {
 	var p models.Player
 	err := pool.QueryRow(ctx,
@@ -45,17 +26,6 @@ func CreatePlayer(ctx context.Context, pool *pgxpool.Pool, name string) (*models
 		Scan(&p.ID, &p.Name, &p.CreatedAt, &p.DeletedAt)
 	if err != nil {
 		return nil, fmt.Errorf("create player: %w", err)
-	}
-	return &p, nil
-}
-
-func UpdatePlayer(ctx context.Context, pool *pgxpool.Pool, id int, name string) (*models.Player, error) {
-	var p models.Player
-	err := pool.QueryRow(ctx,
-		`UPDATE players SET name=$1 WHERE id=$2 AND deleted_at IS NULL RETURNING id, name, created_at, deleted_at`,
-		name, id).Scan(&p.ID, &p.Name, &p.CreatedAt, &p.DeletedAt)
-	if err != nil {
-		return nil, fmt.Errorf("update player: %w", err)
 	}
 	return &p, nil
 }

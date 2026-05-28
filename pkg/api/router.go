@@ -34,7 +34,6 @@ func NewRouter(pool *pgxpool.Pool, adminPassword string, static fs.FS) http.Hand
 	r.Group(func(r chi.Router) {
 		r.Use(authMiddleware(adminPassword))
 		r.Post("/api/players", CreatePlayer(pool))
-		r.Patch("/api/players/{id}", UpdatePlayer(pool))
 		r.Delete("/api/players/{id}", DeletePlayer(pool))
 	})
 
