@@ -14,13 +14,18 @@ async function admin(el) {
   el.innerHTML = `
     <div class="page-header"><h2>Admin</h2></div>
     <div class="card form-section">
-      <h3>Players</h3>
-      <div class="form-row" style="margin-bottom:12px">
+      <h3>Add Player</h3>
+      <div class="form-row">
         <label>Name <input type="text" id="newPlayerName" placeholder="Player name"
                onkeydown="if(event.key==='Enter') adminCreatePlayer()"></label>
         <button class="btn btn-primary" style="align-self:flex-end" onclick="adminCreatePlayer()">Add Player</button>
       </div>
-      <div id="adminPlayerList"><p class="loading">Loading…</p></div>
+    </div>
+    <div class="card form-section" style="margin-top:16px">
+      <h3 class="collapsible-header" onclick="adminTogglePlayerList(this)" style="cursor:pointer;user-select:none">
+        Players <span class="collapse-arrow">▶</span>
+      </h3>
+      <div id="adminPlayerList" style="display:none"></div>
     </div>
     <div class="card form-section" style="margin-top:16px">
       <h3>Import Initial Data</h3>
@@ -37,7 +42,24 @@ async function admin(el) {
       <button class="btn btn-danger" onclick="cleanupAllData()">Clear All Data</button>
     </div>
   `;
-  await adminRefreshPlayers();
+}
+
+function adminTogglePlayerList(header) {
+  const list = document.getElementById('adminPlayerList');
+  const arrow = header.querySelector('.collapse-arrow');
+  const collapsed = list.style.display === 'none';
+  list.style.display = collapsed ? '' : 'none';
+  arrow.textContent = collapsed ? '▼' : '▶';
+  if (collapsed && !list.dataset.loaded) {
+    list.dataset.loaded = '1';
+    list.innerHTML = '<p class="loading">Loading…</p>';
+    adminRefreshPlayers();
+  }
+}
+
+function adminRefreshPlayersIfVisible() {
+  const el = document.getElementById('adminPlayerList');
+  if (el && el.style.display !== 'none') adminRefreshPlayers();
 }
 
 async function adminRefreshPlayers() {
@@ -77,7 +99,7 @@ async function adminCreatePlayer() {
   toast(name + ' added');
   document.getElementById('newPlayerName').value = '';
   state.players = [];
-  await adminRefreshPlayers();
+  adminRefreshPlayersIfVisible();
 }
 
 async function adminDeletePlayer(id) {
@@ -87,7 +109,7 @@ async function adminDeletePlayer(id) {
   if (!res.ok) { toast('Error', false); return; }
   toast('Player deleted');
   state.players = [];
-  await adminRefreshPlayers();
+  adminRefreshPlayersIfVisible();
 }
 
 async function importData() {
@@ -109,7 +131,7 @@ async function importData() {
   toast(`Imported ${data.imported} player(s)`);
   fileInput.value = '';
   state.players = [];
-  await adminRefreshPlayers();
+  adminRefreshPlayersIfVisible();
 }
 
 async function cleanupAllData() {
@@ -121,5 +143,5 @@ async function cleanupAllData() {
   if (!res.ok) { toast(data.error || 'Error', false); return; }
   toast('All data cleared');
   state.players = [];
-  await adminRefreshPlayers();
+  adminRefreshPlayersIfVisible();
 }
