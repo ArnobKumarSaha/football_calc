@@ -84,6 +84,16 @@ func GetMatch(pool *pgxpool.Pool) http.HandlerFunc {
 			return
 		}
 
+		playerIDs := make([]int, len(attendees))
+		for i, a := range attendees {
+			playerIDs[i] = a.PlayerID
+		}
+		playerNames, err := db.GetPlayerNames(r.Context(), pool, playerIDs)
+		if err != nil {
+			writeError(w, http.StatusInternalServerError, err.Error())
+			return
+		}
+
 		svcAttendees := make([]service.AttendeeDue, len(attendees))
 		for i, a := range attendees {
 			svcAttendees[i] = service.AttendeeDue{
@@ -95,20 +105,6 @@ func GetMatch(pool *pgxpool.Pool) http.HandlerFunc {
 		withDues := service.ComputeDues(m.TotalBill, svcAttendees)
 
 		attendeesWithDue := make([]models.MatchAttendeeWithDue, len(withDues))
-		playerNames := map[int]string{}
-		for _, a := range attendees {
-			playerNames[a.PlayerID] = ""
-		}
-		playerIDList := make([]int, 0, len(playerNames))
-		for pid := range playerNames {
-			playerIDList = append(playerIDList, pid)
-		}
-		for _, pid := range playerIDList {
-			p, err := db.GetPlayer(r.Context(), pool, pid)
-			if err == nil {
-				playerNames[pid] = p.Name
-			}
-		}
 		for i, wd := range withDues {
 			attendeesWithDue[i] = models.MatchAttendeeWithDue{
 				MatchAttendee: models.MatchAttendee{

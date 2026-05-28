@@ -2,7 +2,6 @@ package models
 
 import "time"
 
-// Player maps to the players table.
 type Player struct {
 	ID        int        `json:"id"`
 	Name      string     `json:"name"`
@@ -10,7 +9,6 @@ type Player struct {
 	DeletedAt *time.Time `json:"deleted_at,omitempty"`
 }
 
-// Match maps to the matches table; TotalBill is split among attendees.
 type Match struct {
 	ID        int        `json:"id"`
 	Date      string     `json:"date"`
@@ -20,7 +18,6 @@ type Match struct {
 	DeletedAt *time.Time `json:"deleted_at,omitempty"`
 }
 
-// MatchAttendee maps to the match_attendees table; GuestCount adds extra heads to the due calc.
 type MatchAttendee struct {
 	ID         int `json:"id"`
 	MatchID    int `json:"match_id"`
@@ -28,7 +25,7 @@ type MatchAttendee struct {
 	GuestCount int `json:"guest_count"`
 }
 
-// Payment maps to the payments table; MatchID is nil for standalone (non-match) payments.
+// MatchID is nil for standalone payments not associated with a match.
 type Payment struct {
 	ID         int       `json:"id"`
 	PlayerID   int       `json:"player_id"`

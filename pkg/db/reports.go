@@ -17,10 +17,8 @@ type MatchCSVRow struct {
 	MatchID    int
 	Date       string
 	TotalBill  float64
-	PlayerID   int
 	PlayerName string
 	GuestCount int
-	Due        float64
 }
 
 type PaymentCSVRow struct {
@@ -56,10 +54,7 @@ func MonthlyReports(ctx context.Context, pool *pgxpool.Pool, year int) ([]Monthl
 
 func MatchesCSV(ctx context.Context, pool *pgxpool.Pool) ([]MatchCSVRow, error) {
 	rows, err := pool.Query(ctx,
-		`SELECT m.id, m.date::text, m.total_bill,
-		   p.id, p.name, ma.guest_count, ma.id AS attendee_id,
-		   (SELECT MAX(id) FROM match_attendees WHERE match_id=m.id) AS last_id,
-		   (SELECT SUM(1+guest_count) FROM match_attendees WHERE match_id=m.id) AS total_units
+		`SELECT m.id, m.date::text, m.total_bill, p.name, ma.guest_count
 		 FROM matches m
 		 JOIN match_attendees ma ON ma.match_id=m.id
 		 JOIN players p ON p.id=ma.player_id
@@ -70,61 +65,15 @@ func MatchesCSV(ctx context.Context, pool *pgxpool.Pool) ([]MatchCSVRow, error) 
 	}
 	defer rows.Close()
 
-	type rowData struct {
-		matchID    int
-		date       string
-		totalBill  float64
-		playerID   int
-		playerName string
-		guestCount int
-		attendeeID int
-		lastID     int
-		totalUnits float64
-	}
-	var allRows []rowData
+	var result []MatchCSVRow
 	for rows.Next() {
-		var r rowData
-		if err := rows.Scan(&r.matchID, &r.date, &r.totalBill, &r.playerID, &r.playerName, &r.guestCount, &r.attendeeID, &r.lastID, &r.totalUnits); err != nil {
+		var r MatchCSVRow
+		if err := rows.Scan(&r.MatchID, &r.Date, &r.TotalBill, &r.PlayerName, &r.GuestCount); err != nil {
 			return nil, err
 		}
-		allRows = append(allRows, r)
+		result = append(result, r)
 	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-
-	type matchDueAccum struct {
-		sumRounded float64
-		lastID     int
-	}
-	accumMap := map[int]*matchDueAccum{}
-	for _, r := range allRows {
-		if accumMap[r.matchID] == nil {
-			accumMap[r.matchID] = &matchDueAccum{lastID: r.lastID}
-		}
-	}
-
-	result := make([]MatchCSVRow, 0, len(allRows))
-	for _, r := range allRows {
-		perUnit := r.totalBill / r.totalUnits
-		var due float64
-		if r.attendeeID == r.lastID {
-			due = roundTo2(r.totalBill - accumMap[r.matchID].sumRounded)
-		} else {
-			due = roundTo2(perUnit * float64(1+r.guestCount))
-			accumMap[r.matchID].sumRounded += due
-		}
-		result = append(result, MatchCSVRow{
-			MatchID:    r.matchID,
-			Date:       r.date,
-			TotalBill:  r.totalBill,
-			PlayerID:   r.playerID,
-			PlayerName: r.playerName,
-			GuestCount: r.guestCount,
-			Due:        due,
-		})
-	}
-	return result, nil
+	return result, rows.Err()
 }
 
 func PaymentsCSV(ctx context.Context, pool *pgxpool.Pool) ([]PaymentCSVRow, error) {

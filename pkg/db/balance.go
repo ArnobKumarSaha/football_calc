@@ -3,15 +3,11 @@ package db
 import (
 	"context"
 	"fmt"
-	"math"
 
 	"github.com/ArnobKumarSaha/football_calc/pkg/models"
+	"github.com/ArnobKumarSaha/football_calc/pkg/service"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
-
-func roundTo2(v float64) float64 {
-	return math.Round(v*100) / 100
-}
 
 func GetPlayerBalance(ctx context.Context, pool *pgxpool.Pool, playerID int) (*models.BalanceHistory, error) {
 	player, err := GetPlayer(ctx, pool, playerID)
@@ -55,7 +51,7 @@ func GetPlayerBalance(ctx context.Context, pool *pgxpool.Pool, playerID int) (*m
 			}
 			entry.Due = totalBill - others
 		} else {
-			entry.Due = roundTo2(totalBill / totalUnits * float64(1+guestCount))
+			entry.Due = service.Round2(totalBill / totalUnits * float64(1+guestCount))
 		}
 		h.Matches = append(h.Matches, entry)
 	}
@@ -163,7 +159,7 @@ func playerTotalDue(ctx context.Context, pool *pgxpool.Pool, playerID int) (floa
 			totalDue += totalBill - others
 		} else {
 			perUnit := totalBill / totalUnits
-			totalDue += roundTo2(perUnit * float64(1+guestCount))
+			totalDue += service.Round2(perUnit * float64(1+guestCount))
 		}
 	}
 	return totalDue, rows.Err()
@@ -184,7 +180,7 @@ func sumOtherDues(ctx context.Context, pool *pgxpool.Pool, matchID, lastID int, 
 		if err := rows.Scan(&gc); err != nil {
 			return 0, err
 		}
-		sum += roundTo2(perUnit * float64(1+gc))
+		sum += service.Round2(perUnit * float64(1+gc))
 	}
 	return sum, rows.Err()
 }

@@ -28,14 +28,14 @@ func ComputeDues(totalBill float64, attendees []AttendeeDue) []AttendeeDue {
 	copy(result, attendees)
 
 	for i := range lastIdx {
-		d := round2(perUnit * float64(1+result[i].GuestCount))
+		d := Round2(perUnit * float64(1+result[i].GuestCount))
 		result[i].Due = d
 		sumRounded += d
 	}
-	result[lastIdx].Due = round2(totalBill - sumRounded)
+	result[lastIdx].Due = Round2(totalBill - sumRounded)
 	return result
 }
 
-func round2(v float64) float64 {
+func Round2(v float64) float64 {
 	return math.Round(v*100) / 100
 }
