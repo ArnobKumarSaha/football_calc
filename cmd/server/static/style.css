@@ -195,8 +195,6 @@ table {
   width: 100%;
   border-collapse: collapse;
   background: var(--card);
-  border-radius: var(--radius);
-  overflow: hidden;
   box-shadow: 0 1px 3px rgba(0,0,0,.08);
 }
 th, td {
@@ -267,12 +265,7 @@ tr:hover td { background: #fafafa; }
 
 /* ── Reports ─────────────────────────────────────────────────── */
 .reports-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-.reports-grid > .card:last-child { grid-column: 1 / -1; }
 .csv-links { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 8px; }
-
-/* ── Inline edit ─────────────────────────────────────────────── */
-.inline-edit { display: flex; align-items: center; gap: 8px; padding: 8px 0; }
-.inline-edit input { min-width: 200px; padding: 6px 10px; border: 1px solid var(--border); border-radius: var(--radius); font-size: 14px; }
 
 /* ── Toast ───────────────────────────────────────────────────── */
 .toast {
@@ -302,8 +295,6 @@ tr:hover td { background: #fafafa; }
 .bank-info { margin-top: 24px; display: inline-block; }
 .bank-info h4 { font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 10px; }
 .bank-info p { font-size: 13px; margin: 4px 0; }
-
-.mobile-bottom-nav { display: none; }
 
 .hamburger {
   display: none;

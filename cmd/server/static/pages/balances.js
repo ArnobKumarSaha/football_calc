@@ -60,11 +60,11 @@ async function loadPlayerDetail(card) {
       </div>
       <div class="detail-grid">
         <div>
-          <h4 style="margin-bottom:8px">Match History</h4>
+          <h4>Match History</h4>
           ${matchRows.length ? renderTable(['Match', 'Date', 'Due', 'Paid'], matchRows) : '<p class="empty">No matches.</p>'}
         </div>
         <div>
-          <h4 style="margin-bottom:8px">Payments</h4>
+          <h4>Payments</h4>
           ${payRows.length ? renderTable(['Date', 'Amount', 'Match'], payRows) : '<p class="empty">No payments.</p>'}
         </div>
       </div>
