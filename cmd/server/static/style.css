@@ -249,15 +249,31 @@ tr:hover td { background: #fafafa; }
   margin-bottom: 24px;
 }
 .balance-card {
+  position: relative;
   text-align: center;
   cursor: pointer;
   transition: box-shadow .15s, transform .1s;
-  padding: 20px 16px;
+  padding: 10px 16px 8px;
+  border-left: 4px solid var(--border);
 }
+.balance-card.pos { border-left-color: #16a34a; }
+.balance-card.neg { border-left-color: var(--danger); }
 .balance-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,.1); transform: translateY(-1px); }
-.balance-name { font-weight: 600; margin-bottom: 8px; }
-.balance-amount { font-size: 1.2rem; }
-.balance-hint { font-size: 11px; color: var(--muted); margin-top: 8px; }
+.balance-name { font-weight: 600; margin-bottom: 4px; }
+.balance-amount { font-size: 1.1rem; }
+.balance-status-pill {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  display: inline-block;
+  padding: 1px 7px;
+  border-radius: 999px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .03em;
+}
+.balance-card.pos .balance-status-pill { background: #dcfce7; color: #15803d; }
+.balance-card.neg .balance-status-pill { background: #fee2e2; color: #b91c1c; }
 
 .detail-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 16px; flex-wrap: wrap; gap: 8px; }
 .detail-header h3 { font-size: 1.1rem; font-weight: 600; }
