@@ -13,14 +13,6 @@ type MonthlyReport struct {
 	TotalSpent float64 `json:"total_spent"`
 }
 
-type AttendanceReport struct {
-	PlayerID       int     `json:"player_id"`
-	PlayerName     string  `json:"player_name"`
-	MatchesPlayed  int     `json:"matches_played"`
-	TotalMatches   int     `json:"total_matches"`
-	AttendanceRate float64 `json:"attendance_rate"`
-}
-
 type MatchCSVRow struct {
 	MatchID    int
 	Date       string
@@ -56,41 +48,6 @@ func MonthlyReports(ctx context.Context, pool *pgxpool.Pool, year int) ([]Monthl
 		var r MonthlyReport
 		if err := rows.Scan(&r.Month, &r.MatchCount, &r.TotalSpent); err != nil {
 			return nil, err
-		}
-		reports = append(reports, r)
-	}
-	return reports, rows.Err()
-}
-
-func AttendanceReports(ctx context.Context, pool *pgxpool.Pool) ([]AttendanceReport, error) {
-	var totalMatches int
-	err := pool.QueryRow(ctx, `SELECT COUNT(*) FROM matches WHERE deleted_at IS NULL`).Scan(&totalMatches)
-	if err != nil {
-		return nil, fmt.Errorf("total matches: %w", err)
-	}
-
-	rows, err := pool.Query(ctx,
-		`SELECT p.id, p.name, COUNT(DISTINCT ma.match_id) AS matches_played
-		 FROM players p
-		 LEFT JOIN match_attendees ma ON ma.player_id=p.id
-		 LEFT JOIN matches m ON m.id=ma.match_id AND m.deleted_at IS NULL
-		 WHERE p.deleted_at IS NULL
-		 GROUP BY p.id, p.name
-		 ORDER BY matches_played DESC`)
-	if err != nil {
-		return nil, fmt.Errorf("attendance: %w", err)
-	}
-	defer rows.Close()
-
-	var reports []AttendanceReport
-	for rows.Next() {
-		var r AttendanceReport
-		if err := rows.Scan(&r.PlayerID, &r.PlayerName, &r.MatchesPlayed); err != nil {
-			return nil, err
-		}
-		r.TotalMatches = totalMatches
-		if totalMatches > 0 {
-			r.AttendanceRate = float64(r.MatchesPlayed) / float64(totalMatches) * 100
 		}
 		reports = append(reports, r)
 	}

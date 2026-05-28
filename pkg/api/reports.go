@@ -30,20 +30,6 @@ func MonthlyReport(pool *pgxpool.Pool) http.HandlerFunc {
 	}
 }
 
-func AttendanceReport(pool *pgxpool.Pool) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		reports, err := db.AttendanceReports(r.Context(), pool)
-		if err != nil {
-			writeError(w, http.StatusInternalServerError, err.Error())
-			return
-		}
-		if reports == nil {
-			reports = []db.AttendanceReport{}
-		}
-		writeJSON(w, http.StatusOK, reports)
-	}
-}
-
 func MatchesCSV(pool *pgxpool.Pool) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		rows, err := db.MatchesCSV(r.Context(), pool)

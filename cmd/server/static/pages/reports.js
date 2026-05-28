@@ -13,11 +13,6 @@ async function reports(el) {
         <div id="monthlyTable"></div>
       </div>
       <div class="card">
-        <h3>Attendance Rate</h3>
-        <button class="btn btn-primary" onclick="loadAttendanceReport()">Load</button>
-        <div id="attendanceTable" style="margin-top:12px"></div>
-      </div>
-      <div class="card">
         <h3>CSV Exports</h3>
         <div class="csv-links">
           <a href="/api/reports/matches.csv" class="btn btn-primary" download>Matches CSV</a>
@@ -37,14 +32,4 @@ async function loadMonthly() {
     `<tr><td>${r.month}</td><td>${r.match_count}</td><td>৳${r.total_spent.toFixed(2)}</td></tr>`
   );
   document.getElementById('monthlyTable').innerHTML = renderTable(['Month','Matches','Total Spent'], rows);
-}
-
-async function loadAttendanceReport() {
-  const res = await api('GET', '/reports/attendance');
-  if (!res) return;
-  const data = await res.json();
-  const rows = data.map(r =>
-    `<tr><td>${r.player_name}</td><td>${r.matches_played}</td><td>${r.total_matches}</td><td>${r.attendance_rate.toFixed(1)}%</td></tr>`
-  );
-  document.getElementById('attendanceTable').innerHTML = renderTable(['Player','Played','Total','Rate'], rows);
 }

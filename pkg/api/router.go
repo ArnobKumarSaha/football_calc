@@ -70,7 +70,6 @@ func NewRouter(pool *pgxpool.Pool, adminPassword string, static fs.FS) http.Hand
 	})
 
 	r.Get("/api/reports/monthly", MonthlyReport(pool))
-	r.Get("/api/reports/attendance", AttendanceReport(pool))
 	r.Get("/api/reports/matches.csv", MatchesCSV(pool))
 	r.Get("/api/reports/payments.csv", PaymentsCSV(pool))
 
