@@ -73,6 +73,9 @@ func NewRouter(pool *pgxpool.Pool, adminPassword string, static fs.FS) http.Hand
 	r.Get("/api/reports/matches.csv", MatchesCSV(pool))
 	r.Get("/api/reports/payments.csv", PaymentsCSV(pool))
 
+	r.Get("/api/worldcup/fixtures", WorldCupFixtures())
+	r.Get("/api/worldcup/standings", WorldCupStandings())
+
 	r.Handle("/*", http.FileServer(http.FS(static)))
 
 	return r

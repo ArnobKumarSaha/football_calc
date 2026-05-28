@@ -35,9 +35,10 @@ function closeLoginModal() {
 
 function shellHTML() {
   const mainNav = [
-    { page: 'matches',    label: 'Matches' },
-    { page: 'payments',   label: 'Payments' },
-    { page: 'balances',   label: 'Balances' },
+    { page: 'matches',   label: 'Matches' },
+    { page: 'payments',  label: 'Payments' },
+    { page: 'balances',  label: 'Balances' },
+    { page: 'worldcup',  label: 'World Cup 2026' },
   ];
   const bottomNav = [
     { page: 'reports', label: 'Reports' },

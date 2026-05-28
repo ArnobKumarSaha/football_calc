@@ -1,6 +1,6 @@
 'use strict';
 
-const routes = { matches, payments, balances, reports, admin };
+const routes = { matches, payments, balances, reports, admin, worldcup };
 
 window.addEventListener('hashchange', () => {
   const page = currentPage();
