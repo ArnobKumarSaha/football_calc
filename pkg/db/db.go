@@ -12,6 +12,11 @@ import (
 //go:embed schema.sql
 var schemaDDL string
 
+// SchemaSQL returns the embedded schema DDL (CREATE TABLE / indexes / constraints).
+func SchemaSQL() string {
+	return schemaDDL
+}
+
 func Connect(ctx context.Context, databaseURL string) (*pgxpool.Pool, error) {
 	pool, err := pgxpool.New(ctx, databaseURL)
 	if err != nil {

@@ -37,6 +37,12 @@ async function admin(el) {
       </div>
     </div>
     <div class="card form-section" style="margin-top:16px">
+      <h3>Export / Backup</h3>
+      <p>Download a self-contained SQL script (schema + all data) to re-initialize a fresh
+         PostgreSQL with an exact clone of this database — e.g. as a KubeDB init script source.</p>
+      <button class="btn btn-primary" onclick="exportData()">Download SQL Backup</button>
+    </div>
+    <div class="card form-section" style="margin-top:16px">
       <h3>Danger Zone</h3>
       <p>This will permanently delete all matches, attendees, payments, and players.</p>
       <button class="btn btn-danger" onclick="cleanupAllData()">Clear All Data</button>
@@ -132,6 +138,27 @@ async function importData() {
   fileInput.value = '';
   state.players = [];
   adminRefreshPlayersIfVisible();
+}
+
+async function exportData() {
+  let res;
+  try {
+    res = await fetch('/api/admin/export.sql', {
+      headers: { Authorization: 'Bearer ' + state.token },
+    });
+  } catch (e) {
+    toast('Network error', false);
+    return;
+  }
+  if (!res.ok) { toast('Export failed', false); return; }
+  const blob = await res.blob();
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'football-calc-backup.sql';
+  a.click();
+  URL.revokeObjectURL(url);
+  toast('Backup downloaded');
 }
 
 async function cleanupAllData() {

@@ -93,6 +93,7 @@ schema.sql                  # top-level copy (canonical is pkg/db/schema.sql)
 | Method | Path | Notes |
 |--------|------|-------|
 | GET | `/api/auth` | auth check — returns `{ok: true}` if token valid |
+| GET | `/api/admin/export.sql` | download self-contained SQL backup (schema + all data incl. soft-deleted + sequence resets); usable as a KubeDB init `script_source` |
 | POST | `/api/admin/cleanup` | delete all data (irreversible) |
 | POST | `/api/admin/import` | import initial balances from text file (multipart `file` field); format: one `<name> <amount>` per line; only allowed on empty DB |
 

@@ -21,6 +21,19 @@ func CleanupData(pool *pgxpool.Pool) http.HandlerFunc {
 	}
 }
 
+func ExportData(pool *pgxpool.Pool) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		script, err := db.ExportSQL(r.Context(), pool)
+		if err != nil {
+			writeError(w, http.StatusInternalServerError, err.Error())
+			return
+		}
+		w.Header().Set("Content-Type", "application/sql")
+		w.Header().Set("Content-Disposition", "attachment; filename=football-calc-backup.sql")
+		w.Write([]byte(script))
+	}
+}
+
 func ImportData(pool *pgxpool.Pool) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		has, err := db.HasAnyData(r.Context(), pool)
