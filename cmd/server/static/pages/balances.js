@@ -46,7 +46,7 @@ async function loadPlayerDetail(card) {
     `<tr><td>${m.match_id}</td><td>${m.match_date}</td><td>৳${m.due != null ? m.due.toFixed(2) : '—'}</td><td>৳${m.paid.toFixed(2)}</td></tr>`
   );
   const payRows = allPayments.map(p =>
-    `<tr><td>${p.paid_at}</td><td>৳${p.amount.toFixed(2)}</td><td>${p.match_id || '—'}</td></tr>`
+    `<tr><td>${p.paid_at}</td><td>৳${p.amount.toFixed(2)}</td><td>${p.match_id || '—'}</td><td>${p.notes ? escapeHTML(p.notes) : '—'}</td></tr>`
   );
   el.innerHTML = `
     <div class="card">
@@ -65,7 +65,7 @@ async function loadPlayerDetail(card) {
         </div>
         <div>
           <h4>Payments</h4>
-          ${payRows.length ? renderTable(['Date', 'Amount', 'Match'], payRows) : '<p class="empty">No payments.</p>'}
+          ${payRows.length ? renderTable(['Date', 'Amount', 'Match', 'Notes'], payRows) : '<p class="empty">No payments.</p>'}
         </div>
       </div>
     </div>

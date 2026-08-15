@@ -1,0 +1,13 @@
+
+We are regular players. So we get a special discount from turf.
+One match free after playing 8 matches.
+
+Per match costs are 3500. Water cost gets added extra. Not part of the match fee.
+
+So, 3500 * 8 = 28000. This should be costed in 8 matches + 1 free match.
+I think like this : 3100 * 8 + 3200 = 28000
+
+This style is applicable from Card 2 onwards.
+
+Also, the matches are designed like, 4 matches + 1 free match + 4 other matches.
+For example, 8 july, 14 july, 23 july, 28 july. Then free match on 4 August. Then 4 new matches to close the cycle.

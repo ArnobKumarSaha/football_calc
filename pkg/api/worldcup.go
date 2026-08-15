@@ -17,13 +17,13 @@ type wcTeam struct {
 }
 
 type wcFixture struct {
-	ID       string `json:"id"`
-	Date     string `json:"date"`
-	Status   string `json:"status"`
-	Detail   string `json:"detail"`
-	Venue    string `json:"venue"`
-	HomeTeam wcTeam `json:"home_team"`
-	AwayTeam wcTeam `json:"away_team"`
+	ID        string `json:"id"`
+	Date      string `json:"date"`
+	Status    string `json:"status"`
+	Detail    string `json:"detail"`
+	Venue     string `json:"venue"`
+	HomeTeam  wcTeam `json:"home_team"`
+	AwayTeam  wcTeam `json:"away_team"`
 	HomeScore string `json:"home_score"`
 	AwayScore string `json:"away_score"`
 }
@@ -72,9 +72,9 @@ func WorldCupFixtures() http.HandlerFunc {
 						HomeAway string `json:"homeAway"`
 						Score    string `json:"score"`
 						Team     struct {
-							DisplayName string `json:"displayName"`
+							DisplayName  string `json:"displayName"`
 							Abbreviation string `json:"abbreviation"`
-							Logo        string `json:"logo"`
+							Logo         string `json:"logo"`
 						} `json:"team"`
 					} `json:"competitors"`
 				} `json:"competitions"`
@@ -130,7 +130,7 @@ func WorldCupStandings() http.HandlerFunc {
 
 		var raw struct {
 			Children []struct {
-				Name     string `json:"name"`
+				Name      string `json:"name"`
 				Standings struct {
 					Entries []struct {
 						Team struct {
