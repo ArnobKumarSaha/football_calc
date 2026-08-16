@@ -24,6 +24,15 @@ function balanceBadge(v, negThreshold = 0) {
   return `<span class="balance ${cls}">${v >= 0 ? '+' : ''}${v.toFixed(2)}</span>`;
 }
 
+function formatDateTime(iso) {
+  const d = new Date(iso);
+  if (isNaN(d)) return iso;
+  return d.toLocaleString(undefined, {
+    day: 'numeric', month: 'short', year: 'numeric',
+    hour: 'numeric', minute: '2-digit',
+  });
+}
+
 async function ensurePlayers() {
   if (state.players.length) return;
   const res = await api('GET', '/players');

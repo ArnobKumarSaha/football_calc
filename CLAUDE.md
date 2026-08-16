@@ -64,6 +64,7 @@ schema.sql                  # top-level copy (canonical is pkg/db/schema.sql)
 | PATCH | `/api/players/{id}` | `{name}` |
 | DELETE | `/api/players/{id}` | soft-delete |
 | GET | `/api/players/{id}/balance` | full per-match history |
+| GET | `/api/balances/updated-at` | `{updated_at}` — latest `created_at` across matches (non-deleted) + payments; `null` on empty DB |
 
 ### Matches
 | Method | Path | Notes |

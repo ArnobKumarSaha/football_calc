@@ -3,6 +3,7 @@ package db
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"github.com/ArnobKumarSaha/football_calc/pkg/models"
 	"github.com/ArnobKumarSaha/football_calc/pkg/service"
@@ -120,6 +121,19 @@ func AllPlayerBalances(ctx context.Context, pool *pgxpool.Pool) ([]models.Player
 		})
 	}
 	return result, nil
+}
+
+func LastActivityAt(ctx context.Context, pool *pgxpool.Pool) (*time.Time, error) {
+	var ts *time.Time
+	err := pool.QueryRow(ctx,
+		`SELECT GREATEST(
+		   (SELECT MAX(created_at) FROM matches WHERE deleted_at IS NULL),
+		   (SELECT MAX(created_at) FROM payments)
+		 )`).Scan(&ts)
+	if err != nil {
+		return nil, fmt.Errorf("last activity: %w", err)
+	}
+	return ts, nil
 }
 
 func playerTotalPaid(ctx context.Context, pool *pgxpool.Pool, playerID int) (float64, error) {

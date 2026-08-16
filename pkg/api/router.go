@@ -30,6 +30,7 @@ func NewRouter(pool *pgxpool.Pool, adminPassword string, static fs.FS) http.Hand
 
 	r.Get("/api/players", ListPlayers(pool))
 	r.Get("/api/players/{id}/balance", GetPlayerBalance(pool))
+	r.Get("/api/balances/updated-at", BalancesUpdatedAt(pool))
 
 	r.Group(func(r chi.Router) {
 		r.Use(authMiddleware(adminPassword))

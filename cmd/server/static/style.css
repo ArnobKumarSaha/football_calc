@@ -308,6 +308,7 @@ tr:hover td { background: #fafafa; }
 .loading { color: var(--muted); padding: 16px 0; }
 .empty { color: var(--muted); padding: 12px 0; font-style: italic; }
 
+.updated-note { color: var(--muted); font-size: 13px; margin: -8px 0 14px; }
 .bank-info { margin-top: 24px; display: inline-block; }
 .bank-info h4 { font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; margin-bottom: 10px; }
 .bank-info p { font-size: 13px; margin: 4px 0; }

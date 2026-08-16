@@ -3,6 +3,7 @@ package api
 import (
 	"encoding/json"
 	"net/http"
+	"time"
 
 	"github.com/ArnobKumarSaha/football_calc/pkg/db"
 	"github.com/ArnobKumarSaha/football_calc/pkg/models"
@@ -53,6 +54,22 @@ func DeletePlayer(pool *pgxpool.Pool) http.HandlerFunc {
 			return
 		}
 		w.WriteHeader(http.StatusNoContent)
+	}
+}
+
+func BalancesUpdatedAt(pool *pgxpool.Pool) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		ts, err := db.LastActivityAt(r.Context(), pool)
+		if err != nil {
+			writeError(w, http.StatusInternalServerError, err.Error())
+			return
+		}
+		var out *string
+		if ts != nil {
+			s := ts.Format(time.RFC3339)
+			out = &s
+		}
+		writeJSON(w, http.StatusOK, map[string]*string{"updated_at": out})
 	}
 }
 

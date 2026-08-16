@@ -3,12 +3,17 @@
 const BALANCE_ALERT_THRESHOLD = -20;
 
 async function balances(el) {
-  const res = await api('GET', '/players');
+  const [res, tsRes] = await Promise.all([
+    api('GET', '/players'),
+    api('GET', '/balances/updated-at'),
+  ]);
   if (!res) return;
   const list = await res.json();
+  const updatedAt = tsRes ? (await tsRes.json()).updated_at : null;
   if (!list.length) { el.innerHTML = '<p class="empty">No players.</p>'; return; }
   el.innerHTML = `
     <div class="page-header"><h2>Balances</h2></div>
+    ${updatedAt ? `<p class="updated-note">The balances are updated upto ${escapeHTML(formatDateTime(updatedAt))}</p>` : ''}
     <div class="balances-grid">
       ${list.map(p => `
         <div class="balance-card card ${p.balance < BALANCE_ALERT_THRESHOLD ? 'neg' : 'pos'}" data-id="${p.id}" onclick="loadPlayerDetail(this)">
