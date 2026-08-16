@@ -111,7 +111,6 @@ Shohag
 Lotifur
 Kawchar
 Sabbir
-Farzine
 Meraj
 Sarwar
 Shakil
@@ -132,6 +131,7 @@ Sarwar
 Alfeh
 Farzine
 Meraj
+Saber
 
 3 matches remaining to play.
 
@@ -153,4 +153,15 @@ Mennal 400 - June 23
 Shohag 1000 - July 8
 Saurov 1000 - July 8
 Rabbi 1000 - July 8
-Amir 2000?
+Amir 2000 - July 8
+Lotifur 245 - Aug 15
+Arman 4019 - Aug 16
+Saber 245 - Aug 16
+Sarwar 573 - Aug 16
+Kawchar 574 - Aug 16
+Alfeh 330 - Aug 16
+Fakrul 1130 - Aug 16
+Rabbi 2015 - Aug 16
+Shohag 4138 - Aug 16
+Avishek 244 - Aug 16
+Lotifur 295 - Aug 16

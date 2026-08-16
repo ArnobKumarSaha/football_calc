@@ -74,8 +74,8 @@ add_match 2026-07-28 3350 \
 
 add_match 2026-08-04 3900 \
   'Free match (Card 2). 3200 + 300 water already included in this bill. Cost lessened: 400 on Jul 8, 800 on Jul 14, 400 each on Jul 23, Jul 28, Aug 13' \
-  'Avishek,Saber,Nirjhor,Shohag,Lotifur,Kawchar,Sabbir,Farzine,Meraj,Sarwar,Shakil,Tarek,Arnob,Biswarup,Rabbi,Sadi'
+  'Avishek,Saber,Nirjhor,Shohag,Lotifur,Kawchar,Sabbir,Meraj,Sarwar,Shakil,Tarek,Arnob,Biswarup,Rabbi,Sadi'
 
 add_match 2026-08-13 3300 \
   'Card 2. Free match (Aug 4) adjustment: 400 to be lessened' \
-  'Arnob,Biswarup,Sadi,Arman,Shohag,Kawchar,Sarwar,Alfeh,Farzine,Meraj'
+  'Arnob,Biswarup,Sadi,Arman,Shohag,Kawchar,Sarwar,Alfeh,Farzine,Meraj,Saber'
