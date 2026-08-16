@@ -19,8 +19,8 @@ function renderTable(headers, rows) {
   `;
 }
 
-function balanceBadge(v) {
-  const cls = v >= 0 ? 'pos' : 'neg';
+function balanceBadge(v, negThreshold = 0) {
+  const cls = v < negThreshold ? 'neg' : 'pos';
   return `<span class="balance ${cls}">${v >= 0 ? '+' : ''}${v.toFixed(2)}</span>`;
 }
 

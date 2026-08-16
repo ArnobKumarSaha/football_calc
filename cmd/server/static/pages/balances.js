@@ -1,5 +1,7 @@
 'use strict';
 
+const BALANCE_ALERT_THRESHOLD = -20;
+
 async function balances(el) {
   const res = await api('GET', '/players');
   if (!res) return;
@@ -9,9 +11,9 @@ async function balances(el) {
     <div class="page-header"><h2>Balances</h2></div>
     <div class="balances-grid">
       ${list.map(p => `
-        <div class="balance-card card ${p.balance >= 0 ? 'pos' : 'neg'}" data-id="${p.id}" onclick="loadPlayerDetail(this)">
+        <div class="balance-card card ${p.balance < BALANCE_ALERT_THRESHOLD ? 'neg' : 'pos'}" data-id="${p.id}" onclick="loadPlayerDetail(this)">
           <div class="balance-name">${escapeHTML(p.name)}</div>
-          <div class="balance-amount">${balanceBadge(p.balance)}</div>
+          <div class="balance-amount">${balanceBadge(p.balance, BALANCE_ALERT_THRESHOLD)}</div>
           <div class="balance-status-pill">${p.balance >= 0 ? '▲' : '▼'}</div>
         </div>
       `).join('')}
