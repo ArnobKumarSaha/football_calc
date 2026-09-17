@@ -87,7 +87,7 @@ function wcRenderFixtures(el, filter) {
 async function wcLoadFixtures(token) {
   try {
     if (!_wcCache.fixtures) {
-      const res = await fetch('/api/worldcup/fixtures');
+      const res = await fetch(basePath + 'api/worldcup/fixtures');
       if (wcIsStale(token)) return;
       if (!res.ok) throw new Error('HTTP ' + res.status);
       const data = await res.json();
@@ -139,7 +139,7 @@ function wcFixtureCard(f) {
 async function wcLoadStandings(token) {
   try {
     if (!_wcCache.standings) {
-      const res = await fetch('/api/worldcup/standings');
+      const res = await fetch(basePath + 'api/worldcup/standings');
       if (wcIsStale(token)) return;
       if (!res.ok) throw new Error('HTTP ' + res.status);
       const data = await res.json();

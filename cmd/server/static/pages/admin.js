@@ -127,7 +127,7 @@ async function importData() {
   const formData = new FormData();
   formData.append('file', fileInput.files[0]);
 
-  const res = await fetch('/api/admin/import', {
+  const res = await fetch(basePath + 'api/admin/import', {
     method: 'POST',
     headers: { Authorization: 'Bearer ' + state.token },
     body: formData,
@@ -143,7 +143,7 @@ async function importData() {
 async function exportData() {
   let res;
   try {
-    res = await fetch('/api/admin/export.sql', {
+    res = await fetch(basePath + 'api/admin/export.sql', {
       headers: { Authorization: 'Bearer ' + state.token },
     });
   } catch (e) {

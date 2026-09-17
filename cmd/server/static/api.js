@@ -6,7 +6,7 @@ async function api(method, path, body) {
   if (body !== undefined) opts.body = JSON.stringify(body);
   let res;
   try {
-    res = await fetch('/api' + path, opts);
+    res = await fetch(basePath + 'api' + path, opts);
   } catch (e) {
     toast('Network error', false);
     return null;

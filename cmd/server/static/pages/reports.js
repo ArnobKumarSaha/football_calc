@@ -15,8 +15,8 @@ async function reports(el) {
       <div class="card">
         <h3>CSV Exports</h3>
         <div class="csv-links">
-          <a href="/api/reports/matches.csv" class="btn btn-primary" download>Matches CSV</a>
-          <a href="/api/reports/payments.csv" class="btn btn-primary" download>Payments CSV</a>
+          <a href="${basePath}api/reports/matches.csv" class="btn btn-primary" download>Matches CSV</a>
+          <a href="${basePath}api/reports/payments.csv" class="btn btn-primary" download>Payments CSV</a>
         </div>
       </div>
     </div>

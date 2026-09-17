@@ -4,7 +4,7 @@ metadata:
   name: football
   namespace: dev
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   selector:
     app: football
   ports:
