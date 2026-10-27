@@ -1,0 +1,27 @@
+apiVersion: kubedb.com/v1
+kind: Postgres
+metadata:
+  name: std
+  namespace: stash
+spec:
+  version: "16.4"
+  replicas: 1
+  storageType: Durable
+  storage:
+    storageClassName: local-path
+    accessModes:
+      - ReadWriteOnce
+    resources:
+      requests:
+        storage: 1Gi
+  podTemplate:
+    spec:
+      containers:
+        - name: postgres
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              memory: 512Mi
+  deletionPolicy: Halt

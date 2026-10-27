@@ -11,7 +11,7 @@ spec:
       namespace: ace
       sectionName: https
   hostnames:
-    - ops.appscode.dev
+    - appscode.com
   rules:
     # Without the trailing slash the page's relative assets would resolve against "/".
     - matches:
@@ -39,6 +39,6 @@ spec:
         - group: ""
           kind: Service
           name: football
-          namespace: dev
+          namespace: stash
           port: 80
           weight: 1

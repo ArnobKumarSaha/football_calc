@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: football
-  namespace: dev
+  namespace: stash
 spec:
   replicas: 1
   selector:
@@ -22,6 +22,15 @@ spec:
           envFrom:
             - secretRef:
                 name: football-secret
+          env:
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: std-auth
+                  key: password
+            # Keyword/value DSN instead of a URL so the generated password needs no URL-encoding.
+            - name: DATABASE_URL
+              value: "host=std.stash.svc port=5432 user=postgres password=$(DB_PASSWORD) dbname=postgres sslmode=disable"
           livenessProbe:
             httpGet:
               path: /healthz
