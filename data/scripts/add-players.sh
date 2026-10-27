@@ -7,7 +7,7 @@ ADMIN_PASSWORD=${ADMIN_PASSWORD:-changeme}
 
 
 for name in Imtiaz Mamun Lotifur Mennal Avishek Saber Nirjhor \
-            Kawchar Sabbir Farzine Meraj Sarwar Shakil Tarek Alfeh; do
+            Kawchar Sabbir Farzine Meraj Sarwar Shakil Tarek Alfeh Rizu; do
   curl -sS -X POST "$BASE_URL/api/players" \
     -H "Authorization: Bearer $ADMIN_PASSWORD" \
     -H "Content-Type: application/json" \

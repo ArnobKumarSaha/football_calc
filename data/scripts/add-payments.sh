@@ -29,6 +29,7 @@ add_payment() {
 }
 
 # Listed under the "Card 3" heading in cost.txt, but noted by the card each date falls in.
+# Later Card 2 entries carry no notes, matching the live DB.
 add_payment Shahed  219  2026-06-11 'Card 1'
 add_payment Palash  281  2026-06-11 'Card 1'
 add_payment Shohag  3000 2026-06-12 'Card 1'
@@ -36,15 +37,22 @@ add_payment Mennal  400  2026-06-23 'Card 1'
 add_payment Shohag  1000 2026-07-08 'Card 2'
 add_payment Saurov  1000 2026-07-08 'Card 2'
 add_payment Rabbi   1000 2026-07-08 'Card 2'
-add_payment Amir    2000 2026-07-08 'Card 2'
-add_payment Lotifur 245  2026-08-15 'Card 2'
-add_payment Arman   4019 2026-08-16 'Card 2'
-add_payment Saber   245  2026-08-16 'Card 2'
-add_payment Sarwar  573  2026-08-16 'Card 2'
-add_payment Kawchar 574  2026-08-16 'Card 2'
-add_payment Alfeh   330  2026-08-16 'Card 2'
-add_payment Fakrul  1130 2026-08-16 'Card 2'
-add_payment Rabbi   2015 2026-08-16 'Card 2'
-add_payment Shohag  4138 2026-08-16 'Card 2'
-add_payment Avishek 244  2026-08-16 'Card 2'
-add_payment Lotifur 295  2026-08-16 'Card 2'
+add_payment Amir    2000 2026-07-08
+add_payment Lotifur 540  2026-08-15
+add_payment Arnob   8340 2026-08-15
+add_payment Arman   4019 2026-08-16
+add_payment Saber   245  2026-08-16
+add_payment Sarwar  573  2026-08-16
+add_payment Kawchar 574  2026-08-16
+add_payment Alfeh   330  2026-08-16
+add_payment Fakrul  1130 2026-08-16
+add_payment Rabbi   2015 2026-08-16
+add_payment Shohag  4138 2026-08-16
+add_payment Avishek 244  2026-08-16
+add_payment Amir    1500 2026-08-16
+add_payment Farzine 330  2026-08-16
+add_payment Saurov  545  2026-08-17
+add_payment Mohin   1533 2026-08-17 'old doc calc'
+add_payment Zahid   1179 2026-08-17
+add_payment Biswarup 3343 2026-08-17
+add_payment Sadi    3427 2026-08-17

@@ -41,7 +41,7 @@ add_match 2026-06-04 3100 \
 
 add_match 2026-06-11 3340 \
   'Card 1. Free match (Jun 4) adjustment: 400 to be lessened' \
-  'Shohag,Amir,Arman,Saurov,Rabbi,Sadi,Arnob,Biswarup,Imtiaz,Rasel,Rudro,Fakrul,Rubel,Zahin,Mamun'
+  'Shohag,Amir,Arman,Saurov,Rabbi,Sadi,Arnob,Biswarup,Imtiaz,Rasel,Rudro,Fakrul,Rubel,Zahin,Mamun,Rizu'
 
 add_match 2026-06-16 3280 \
   'Card 1. Free match (Jun 4) adjustment: 400 to be lessened' \
